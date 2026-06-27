@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap');
+  :root {
+    --bg:#0a0e1a;--surface:#111827;--card:#1a2235;--border:#2a3550;
+    --accent:#00d4aa;--accent2:#3b82f6;--warn:#f59e0b;--danger:#ef4444;
+    --success:#10b981;--text:#e2e8f0;--muted:#64748b;
+    --mono:'JetBrains Mono',monospace;--sans:'Inter',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+  .screen{display:none;}
+  .screen.active{display:flex;flex-direction:column;min-height:100vh;}
+
+  .hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+  .hdr-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:700;}
+  .exit-btn{background:var(--border);border:none;color:var(--text);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;}
+
+  .prog-wrap{height:4px;background:var(--border);}
+  .prog-fill{height:4px;background:var(--accent);transition:width .4s;}
+
+  .vitals{background:#0d1520;border-bottom:1px solid var(--border);padding:8px 12px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+  .vit{display:flex;flex-direction:column;align-items:center;gap:1px;}
+  .vit-lbl{font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);}
+  .vit-val{font-family:var(--mono);font-size:16px;font-weight:700;}
+  .vit-val.g{color:#00ff88;} .vit-val.y{color:#ffd700;} .vit-val.c{color:#00d4ff;} .vit-val.o{color:#ff8c00;}
+  .vit-unit{font-size:8px;color:var(--muted);}
+
+  .pt-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin:12px;padding:14px;}
+  .pt-name{font-size:17px;font-weight:700;margin-bottom:2px;}
+  .pt-proc{font-size:12px;color:var(--muted);margin-bottom:10px;}
+  .pt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .pt-item{display:flex;flex-direction:column;gap:2px;}
+  .pt-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+  .pt-val{font-size:13px;font-weight:500;}
+  .asa-tag{display:inline-block;background:var(--border);color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:4px;float:right;}
+
+  .wt-box{background:var(--card);border:2px solid var(--accent);border-radius:10px;margin:0 12px 12px;padding:16px;}
+  .wt-title{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .wt-formula{font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:12px;line-height:1.5;}
+  .wt-row{display:flex;align-items:center;gap:10px;}
+  .wt-input{background:var(--surface);border:2px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:22px;padding:10px;width:90px;text-align:center;}
+  .wt-input:focus{outline:none;border-color:var(--accent);}
+  .wt-input.ok{border-color:var(--success);color:var(--success);}
+  .wt-input.err{border-color:var(--danger);color:var(--danger);}
+  .wt-fb{font-size:12px;flex:1;font-family:var(--mono);}
+
+  .steps{padding:0 12px 20px;flex:1;}
+  .grp-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin:16px 0 8px;padding-left:8px;border-left:2px solid var(--accent);}
+
+  .step{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;transition:all .2s;}
+  .step.done{border-color:var(--success);background:#0a1f18;}
+  .step.active{border-color:var(--accent);background:#091d22;}
+  .step.locked{opacity:.35;pointer-events:none;}
+  .step.bad{border-color:var(--danger);background:#1f0a0a;}
+
+  .step-hdr{padding:13px 14px;display:flex;align-items:center;gap:10px;}
+  .step-num{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--mono);}
+  .done .step-num{background:var(--success);border-color:var(--success);color:#000;}
+  .active .step-num{border-color:var(--accent);color:var(--accent);}
+  .bad .step-num{background:var(--danger);border-color:var(--danger);color:#fff;}
+  .step-txt{flex:1;font-size:14px;font-weight:500;line-height:1.3;}
+  .badge{font-size:9px;padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:.5px;flex-shrink:0;}
+  .badge.calc{background:#1e3a5f;color:#60a5fa;}
+  .badge.act{background:#1a3020;color:#34d399;}
+  .badge.crit{background:#3a1a1a;color:#f87171;}
+
+  .step-body{padding:0 14px 14px;}
+  .step-detail{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px;white-space:pre-line;}
+  .crit-alert{background:#3a0f0f;border:2px solid var(--danger);border-radius:8px;padding:10px 12px;font-size:12px;color:#fca5a5;font-weight:600;margin-bottom:10px;line-height:1.5;}
+
+  .drug-box{background:#0a1525;border:1px solid var(--border);border-radius:8px;padding:12px;}
+  .drug-header{margin-bottom:10px;}
+  .drug-name{font-size:15px;font-weight:700;}
+  .drug-formula{font-size:11px;color:var(--muted);font-family:var(--mono);}
+  .drug-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+  .d-inp-grp{display:flex;flex-direction:column;gap:4px;}
+  .d-inp-lbl{font-size:10px;color:var(--muted);}
+  .d-inp{background:var(--surface);border:2px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:20px;padding:10px;text-align:center;width:100%;}
+  .d-inp:focus{outline:none;border-color:var(--accent);}
+  .d-inp.ok{border-color:var(--success);color:var(--success);}
+  .d-inp.err{border-color:var(--danger);color:var(--danger);}
+  .d-fb{font-size:11px;height:16px;font-family:var(--mono);}
+  .d-fb.ok{color:var(--success);} .d-fb.err{color:var(--danger);}
+
+  .btn-primary{display:flex;align-items:center;justify-content:center;background:var(--accent);color:#000;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;}
+  .btn-primary:active{opacity:.8;}
+  .btn-secondary{background:var(--border);color:var(--text);border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:8px;}
+  .btn-check{background:var(--accent2);color:#fff;border:none;border-radius:8px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-top:8px;}
+
+  .sel-screen{background:var(--bg);flex:1;display:flex;flex-direction:column;}
+  .sel-hero{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 16px;}
+  .sel-eyebrow{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+  .sel-title{font-size:22px;font-weight:700;line-height:1.2;}
+  .sel-sub{font-size:13px;color:var(--muted);margin-top:4px;}
+  .sel-cards{padding:16px;display:flex;flex-direction:column;gap:10px;}
+  .mode-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:border-color .2s;}
+  .mode-card:active{border-color:var(--accent);background:#0d1f2e;}
+  .mode-icon{font-size:30px;flex-shrink:0;}
+  .mode-info{flex:1;}
+  .mode-tag{font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:4px;display:inline-block;margin-bottom:4px;}
+  .tag-lma{background:#1e3a5f;color:#60a5fa;}
+  .tag-rsi{background:#3a1a1a;color:#f87171;}
+  .tag-reg{background:#1a3020;color:#34d399;}
+  .tag-eme{background:#2d1a3a;color:#c084fc;}
+  .mode-name{font-size:16px;font-weight:700;}
+  .mode-desc{font-size:12px;color:var(--muted);line-height:1.4;}
+  .mode-arrow{font-size:18px;color:var(--muted);flex-shrink:0;}
+
+  .res-screen{background:var(--bg);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;gap:20px;text-align:center;}
+  .res-mode{font-size:18px;font-weight:700;}
+  .res-eyebrow{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);}
+  .score-ring{position:relative;width:130px;height:130px;display:flex;align-items:center;justify-content:center;}
+  .score-ring svg{position:absolute;top:0;left:0;transform:rotate(-90deg);}
+  .score-pct{font-size:36px;font-weight:700;font-family:var(--mono);}
+  .score-verdict{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+  .res-table{background:var(--card);border:1px solid var(--border);border-radius:10px;width:100%;max-width:360px;}
+  .res-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);}
+  .res-row:last-child{border-bottom:none;}
+  .res-lbl{font-size:13px;color:var(--muted);}
+  .res-val{font-size:13px;font-weight:600;}
+  .res-btns{display:flex;flex-direction:column;gap:8px;width:100%;max-width:360px;}
+
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--success);color:#000;padding:11px 20px;border-radius:10px;font-weight:700;font-size:13px;z-index:999;transition:transform .3s;white-space:nowrap;max-width:90vw;text-align:center;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast.error{background:var(--danger);color:#fff;}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- SELECT -->
+<div class="screen active sel-screen" id="screen-select">
+  <div class="sel-hero">
+    <div class="sel-eyebrow">DBAP805 · Basic Principles of Anesthesia II</div>
+    <div class="sel-title">Induction Sequence Trainer</div>
+    <div class="sel-sub">Practice drug calculations &amp; anesthesia sequences</div>
+  </div>
+  <div class="sel-cards">
+    <div class="mode-card" onclick="startMode('lma')">
+      <div class="mode-icon">😷</div>
+      <div class="mode-info">
+        <div class="mode-tag tag-lma">LMA</div>
+        <div class="mode-name">LMA Induction</div>
+        <div class="mode-desc">Supraglottic airway · Fentanyl, Lidocaine, Propofol</div>
+      </div>
+      <div class="mode-arrow">›</div>
+    </div>
+    <div class="mode-card" onclick="startMode('regular')">
+      <div class="mode-icon">🫁</div>
+      <div class="mode-info">
+        <div class="mode-tag tag-reg">Regular</div>
+        <div class="mode-name">Regular Induction</div>
+        <div class="mode-desc">ETT · Rocuronium · Laryngoscopy &amp; mask ventilation</div>
+      </div>
+      <div class="mode-arrow">›</div>
+    </div>
+    <div class="mode-card" onclick="startMode('rsi')">
+      <div class="mode-icon">⚡</div>
+      <div class="mode-info">
+        <div class="mode-tag tag-rsi">RSI</div>
+        <div class="mode-name">Rapid Sequence</div>
+        <div class="mode-desc">Full stomach · Cricoid pressure · NO mask ventilation</div>
+      </div>
+      <div class="mode-arrow">›</div>
+    </div>
+    <div class="mode-card" onclick="startMode('emergence')">
+      <div class="mode-icon">🌅</div>
+      <div class="mode-info">
+        <div class="mode-tag tag-eme">Emergence</div>
+        <div class="mode-name">Emergence</div>
+        <div class="mode-desc">Reversal · Spontaneous ventilation · Extubation</div>
+      </div>
+      <div class="mode-arrow">›</div>
+    </div>
+  </div>
+</div>
+
+<!-- SIM -->
+<div class="screen" id="screen-sim">
+  <div class="hdr">
+    <div class="hdr-title" id="sim-label">—</div>
+    <button class="exit-btn" onclick="showSelect()">← Exit</button>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+
+  <div class="vitals">
+    <div class="vit"><span class="vit-lbl">SpO2</span><span class="vit-val g" id="v-spo2">—</span><span class="vit-unit">%</span></div>
+    <div class="vit"><span class="vit-lbl">NIBP</span><span class="vit-val y" id="v-nibp" style="font-size:12px;">—</span><span class="vit-unit">mmHg</span></div>
+    <div class="vit"><span class="vit-lbl">HR</span><span class="vit-val g" id="v-hr">—</span><span class="vit-unit">bpm</span></div>
+    <div class="vit"><span class="vit-lbl">ETCO2</span><span class="vit-val c" id="v-etco2">—</span><span class="vit-unit">mmHg</span></div>
+  </div>
+
+  <div class="pt-card">
+    <span class="asa-tag" id="pt-asa">—</span>
+    <div class="pt-name" id="pt-name">—</div>
+    <div class="pt-proc" id="pt-proc">—</div>
+    <div class="pt-grid">
+      <div class="pt-item"><span class="pt-lbl">Age</span><span class="pt-val" id="pt-age">—</span></div>
+      <div class="pt-item"><span class="pt-lbl">Weight (lbs)</span><span class="pt-val" id="pt-lbs">—</span></div>
+      <div class="pt-item"><span class="pt-lbl">Weight (kg)</span><span class="pt-val" id="pt-kg">—</span></div>
+      <div class="pt-item"><span class="pt-lbl">Allergies</span><span class="pt-val" id="pt-allergy">—</span></div>
+      <div class="pt-item"><span class="pt-lbl">PMH</span><span class="pt-val" id="pt-pmh">—</span></div>
+    </div>
+  </div>
+
+  <div class="wt-box" id="wt-box" style="display:none">
+    <div class="wt-title">⚖️ Calculate Patient Weight</div>
+    <div class="wt-formula">Formula: lbs ÷ 2, then subtract 10%
+Example: 180 lbs ÷ 2 = 90 → 90 − 9 = <strong style="color:var(--text)">81 kg</strong></div>
+    <div class="wt-row">
+      <input class="wt-input" id="wt-inp" type="number" placeholder="kg" inputmode="decimal" oninput="checkWt()">
+      <div class="wt-fb" id="wt-fb"></div>
+    </div>
+    <button class="btn-primary" onclick="confirmWt()">Confirm Weight &amp; Begin →</button>
+  </div>
+
+  <div class="steps" id="steps"></div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results">
+  <div class="res-screen">
+    <div>
+      <div class="res-eyebrow">Simulation Complete</div>
+      <div class="res-mode" id="res-mode">—</div>
+    </div>
+    <div class="score-ring">
+      <svg width="130" height="130" viewBox="0 0 130 130">
+        <circle cx="65" cy="65" r="56" fill="none" stroke="#2a3550" stroke-width="9"/>
+        <circle cx="65" cy="65" r="56" fill="none" stroke="var(--accent)" stroke-width="9"
+          stroke-dasharray="351.9" stroke-dashoffset="351.9" id="score-arc" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="score-pct" id="score-pct">—%</div>
+        <div class="score-verdict" id="score-verdict">—</div>
+      </div>
+    </div>
+    <div class="res-table" id="res-table"></div>
+    <div class="res-btns">
+      <button class="btn-primary" onclick="retryMode()">🔄 Retry Same Mode</button>
+      <button class="btn-secondary" onclick="showSelect()">← Choose Mode</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PATIENTS=[
+  {name:"Margaret Holt",age:"58 F",lbs:160,proc:"Laparoscopic cholecystectomy",asa:"ASA II",allergy:"NKDA",pmh:"HTN, GERD"},
+  {name:"James Ortega",age:"42 M",lbs:200,proc:"Right knee arthroscopy",asa:"ASA I",allergy:"Penicillin",pmh:"None"},
+  {name:"Patricia Webb",age:"67 F",lbs:180,proc:"Inguinal hernia repair",asa:"ASA III",allergy:"Sulfa",pmh:"DM2, HTN, OSA"},
+  {name:"Dennis Park",age:"35 M",lbs:220,proc:"Appendectomy",asa:"ASA II",allergy:"NKDA",pmh:"Anxiety"},
+  {name:"Linda Castillo",age:"51 F",lbs:145,proc:"Thyroidectomy",asa:"ASA II",allergy:"Latex",pmh:"Hypothyroidism"},
+];
+let mode,patient,steps,states,score;
+function kgCalc(lbs){return Math.round((lbs/2)*0.9);}
+function setVitals(phase){
+  const v={pre:{spo2:'98',nibp:'128/82',hr:'74',etco2:'—'},maintained:{spo2:'100',nibp:'110/70',hr:'68',etco2:'35'},intubated:{spo2:'100',nibp:'108/68',hr:'65',etco2:'38'},post:{spo2:'97',nibp:'132/86',hr:'82',etco2:'42'}}[phase]||{spo2:'—',nibp:'—',hr:'—',etco2:'—'};
+  ['spo2','nibp','hr','etco2'].forEach(k=>document.getElementById('v-'+k).textContent=v[k]);
+}
+
+// ── REVERSAL AGENT RANDOMIZER ──
+// Returns an array of 1 or 2 step objects for reversal drug calculation
+function buildReversalSteps(w, context) {
+  const r = x => Math.round(x * 100) / 100;
+  // Pick randomly among 4 scenarios
+  const roll = Math.floor(Math.random() * 4);
+
+  if (roll === 0) {
+    // Sugammadex moderate block (2 mg/kg)
+    const dose = w * 2, vol = r(dose / 100);
+    return [{
+      id:'rev_drug', grp:'Drug Calculations',
+      txt:'Reversal: Sugammadex — Moderate Block',
+      type:'drug', badge:'calc',
+      revScenario:'🟡 Blockade: MODERATE (T1–T3 present)\nAgent assigned: Sugammadex 2 mg/kg',
+      drug:{name:'Sugammadex',formula:'2 mg/kg  |  100 mg/ml',min:dose,max:dose,vmin:vol,vmax:vol,du:'mg',vu:'ml'}
+    }];
+  } else if (roll === 1) {
+    // Sugammadex deep block (4 mg/kg)
+    const dose = w * 4, vol = r(dose / 100);
+    return [{
+      id:'rev_drug', grp:'Drug Calculations',
+      txt:'Reversal: Sugammadex — Deep Block',
+      type:'drug', badge:'calc',
+      revScenario:'🔴 Blockade: DEEP (0 twitches, PTC present)\nAgent assigned: Sugammadex 4 mg/kg',
+      drug:{name:'Sugammadex',formula:'4 mg/kg  |  100 mg/ml',min:dose,max:dose,vmin:vol,vmax:vol,du:'mg',vu:'ml'}
+    }];
+  } else if (roll === 2) {
+    // Sugammadex immediate reversal (16 mg/kg)
+    const dose = w * 16, vol = r(dose / 100);
+    return [{
+      id:'rev_drug', grp:'Drug Calculations',
+      txt:'Reversal: Sugammadex — Immediate/Emergency',
+      type:'drug', badge:'calc',
+      revScenario:'🚨 Scenario: CANNOT INTUBATE / CANNOT OXYGENATE\nAgent assigned: Sugammadex 16 mg/kg (immediate reversal of rocuronium)',
+      drug:{name:'Sugammadex',formula:'16 mg/kg  |  100 mg/ml',min:dose,max:dose,vmin:vol,vmax:vol,du:'mg',vu:'ml'}
+    }];
+  } else {
+    // Neostigmine + Glycopyrrolate
+    const neoDoseMin = r(w * 0.025), neoDoseMax = r(w * 0.075);
+    const neoVolMin = r(neoDoseMin / 1), neoVolMax = r(neoDoseMax / 1);
+    const glyDoseMin = r(w * 0.010), glyDoseMax = r(w * 0.020);
+    const glyVolMin = r(glyDoseMin / 0.2), glyVolMax = r(glyDoseMax / 0.2);
+    return [
+      {
+        id:'rev_neo', grp:'Drug Calculations',
+        txt:'Reversal: Neostigmine',
+        type:'drug', badge:'calc',
+        revScenario:'🟡 Blockade: MODERATE (TOF ≥2 twitches)\nAgent assigned: Neostigmine + Glycopyrrolate\nCalculate BOTH drugs.',
+        drug:{name:'Neostigmine',formula:'25–75 mcg/kg  |  1 mg/ml',min:neoDoseMin*1000/1000,max:neoDoseMax*1000/1000,vmin:neoVolMin,vmax:neoVolMax,du:'mg',vu:'ml'}
+      },
+      {
+        id:'rev_gly', grp:'Drug Calculations',
+        txt:'Reversal: Glycopyrrolate (give with Neostigmine)',
+        type:'drug', badge:'calc',
+        drug:{name:'Glycopyrrolate',formula:'10–20 mcg/kg  |  0.2 mg/ml',min:glyDoseMin*1000/1000,max:glyDoseMax*1000/1000,vmin:glyVolMin,vmax:glyVolMax,du:'mg',vu:'ml'}
+      }
+    ];
+  }
+}
+
+function buildSteps(m,pt){
+  const w=pt.kg;
+  const fd=[w,w*2],fv=[w/50,w*2/50];
+  const ld=w,lv=w/20;
+  const pd=[w,w*2],pv=[w/10,w*2/10];
+  const rod=Math.round(w*.6*10)/10,rov=Math.round(rod/10*10)/10;
+  const sd=[Math.round(w*10)/10,Math.round(w*1.5*10)/10],sv=[Math.round(w/20*10)/10,Math.round(w*1.5/20*10)/10];
+
+  const pre=[
+    {id:'mon',grp:'Pre-Induction',txt:'Apply monitors (ECG, SpO₂, NIBP)',type:'act',badge:'act',detail:'Connect all three monitors. Safety first — monitors before anything else.',action:'Monitors applied — ECG, SpO₂, NIBP connected',cb:()=>setVitals('pre')},
+    {id:'base',grp:'Pre-Induction',txt:'Obtain baseline vital signs',type:'act',badge:'act',detail:'Cycle NIBP. Record SpO₂ and HR before any medications.',action:'Baseline vitals obtained'},
+    {id:'preo',grp:'Pre-Induction',txt:'Pre-oxygenation',type:'act',badge:'act',detail:'Tight mask seal · O₂ >6 L/min · APL valve open (set to zero)\n\nReach ONE of:\n• 3 forced vital capacities\n• 3 min 100% O₂\n• EtO₂ >85%',action:'Pre-oxygenation complete — EtO₂ >85%',critical:m==='rsi'?'RSI: O₂ >6 L/min. APL open. NO positive pressure ventilation after drugs.':null},
+  ];
+  const drugBase=[
+    {id:'fent',grp:'Drug Calculations',txt:'Fentanyl',type:'drug',badge:'calc',drug:{name:'Fentanyl',formula:'1–2 mcg/kg  |  50 mcg/ml',min:fd[0],max:fd[1],vmin:fv[0],vmax:fv[1],du:'mcg',vu:'ml'}},
+    {id:'lido',grp:'Drug Calculations',txt:'Lidocaine',type:'drug',badge:'calc',drug:{name:'Lidocaine',formula:'1 mg/kg  |  20 mg/ml',min:ld,max:ld,vmin:lv,vmax:lv,du:'mg',vu:'ml'}},
+    {id:'prop',grp:'Drug Calculations',txt:'Propofol',type:'drug',badge:'calc',drug:{name:'Propofol',formula:'1–2 mg/kg  |  10 mg/ml',min:pd[0],max:pd[1],vmin:pv[0],vmax:pv[1],du:'mg',vu:'ml'}},
+  ];
+  const lid={id:'lid',grp:'Airway Management',txt:'Loss of lid reflex & tape eyes',type:'act',badge:'act',detail:'Watch for lid reflex to disappear as propofol takes effect. Gently tape eyes closed once lost.',action:'Lid reflex lost — eyes taped'};
+
+  // Build randomized reversal steps once per session
+  const reversalSteps = buildReversalSteps(w, m);
+
+  if(m==='lma') return[...pre,...drugBase,lid,
+    {id:'lma',grp:'Airway Management',txt:'LMA insertion',type:'act',badge:'act',detail:'Select appropriate size LMA. Insert. Connect to circuit. Adjust APL valve. Verify seal. Turn volatile on.',action:'LMA in — circuit connected, seal confirmed, volatile on'},
+    {id:'vent',grp:'Airway Management',txt:'Assisted ventilation & confirm ETCO₂',type:'act',badge:'act',detail:'Hand-bag or PSV Pro · 1 L/min O₂ + 1 L/min air · Confirm positive ETCO₂ waveform.',action:'ETCO₂ confirmed — 1L O₂ + 1L air, vent settings set',cb:()=>setVitals('maintained')},
+    {id:'safe',grp:'Safety & Professionalism',txt:'Safety check (PPE, ergonomics)',type:'act',badge:'act',detail:'Posture · Gloves, mask, eye protection · Table height · Machine positioning',action:'Safety check complete'},
+  ];
+  if(m==='regular') return[...pre,...drugBase,lid,
+    {id:'roc',grp:'Drug Calculations',txt:'Rocuronium',type:'drug',badge:'calc',drug:{name:'Rocuronium',formula:'0.6 mg/kg  |  10 mg/ml',min:rod,max:rod,vmin:rov,vmax:rov,du:'mg',vu:'ml'}},
+    {id:'mvent',grp:'Airway Management',txt:'Mask ventilation — confirm ETCO₂',type:'act',badge:'act',detail:'PPV with tight mask seal. Adjust APL valve. Chest rise, fog in mask, + ETCO₂. Volatile on.',action:'Mask ventilation confirmed — ETCO₂ positive, volatile on'},
+    {id:'intub',grp:'Airway Management',txt:'Laryngoscopy & intubation',type:'act',badge:'crit',detail:'DL with correct blade · Insert ETT · Verify depth · Inflate cuff · Auscultate bilateral midaxillary lines · Confirm ETCO₂',action:'ETT placed — depth confirmed, cuff inflated, bilateral sounds, ETCO₂ +',critical:'Turn gases off before laryngoscopy, back on after tube confirmed.',cb:()=>setVitals('intubated')},
+    {id:'maint',grp:'Maintenance',txt:'Set maintenance mode',type:'act',badge:'act',detail:'Volatile on · 1 L air + 1 L O₂ · Set vent settings.',action:'Maintenance mode set — volatile on, 1L O₂ + 1L air'},
+    ...reversalSteps,
+    {id:'safe',grp:'Safety & Professionalism',txt:'Safety check (PPE, blade disposal)',type:'act',badge:'act',detail:'Dispose of dirty blade safely · PPE check · Ergonomics',action:'Safety complete — blade disposed'},
+  ];
+  if(m==='rsi') return[...pre,
+    {id:'cric',grp:'RSI — Critical',txt:'⚠️ Apply cricoid pressure BEFORE drugs',type:'act',badge:'crit',detail:'Instruct assistant to apply cricoid pressure NOW — before fentanyl. Verify Sellick technique. Must hold from induction until cuff confirmed.',action:'Cricoid pressure applied — technique verified',critical:'CRITICAL: Cricoid on BEFORE any drug. Hold until ETT cuff inflated and confirmed.'},
+    ...drugBase,
+    {id:'sucs',grp:'Drug Calculations',txt:'Succinylcholine',type:'drug',badge:'calc',drug:{name:'Succinylcholine',formula:'1–1.5 mg/kg  |  20 mg/ml',min:sd[0],max:sd[1],vmin:sv[0],vmax:sv[1],du:'mg',vu:'ml'}},
+    {id:'noppv',grp:'RSI — Critical',txt:'🚫 NO positive pressure ventilation',type:'act',badge:'crit',detail:'Do NOT mask ventilate. Allow fasciculations to complete (~60 sec). Proceed directly to laryngoscopy.',action:'No PPV — waiting for succinylcholine onset',critical:'Mask ventilation in RSI = automatic FAIL. Aspiration risk.'},
+    {id:'intub',grp:'Airway Management',txt:'Laryngoscopy, intubation & release cricoid',type:'act',badge:'crit',detail:'DL · Insert ETT · Verify depth · Inflate cuff · Auscultate bilaterally · Confirm ETCO₂ · THEN release cricoid · Volatile on.',action:'ETT confirmed — cricoid released, volatile on',critical:'Release cricoid ONLY after cuff inflated and position confirmed.',cb:()=>setVitals('intubated')},
+    {id:'vent',grp:'Maintenance',txt:'Ventilator settings',type:'act',badge:'act',detail:'1 L/min O₂ + 1 L/min air · Appropriate tidal volume and rate.',action:'Vent set — 1L O₂ + 1L air'},
+    {id:'safe',grp:'Safety & Professionalism',txt:'Safety check',type:'act',badge:'act',detail:'PPE · Ergonomics · Closed-loop communication with team',action:'Safety check complete'},
+  ];
+  if(m==='emergence') return[
+    {id:'tof',grp:'Neuromuscular Reversal',txt:'Check TOF (Train-of-Four)',type:'act',badge:'act',detail:'PNS on ulnar nerve at wrist. Assess TOF ratio. Need T4/T1 ≥0.9 for safe extubation.',action:'TOF assessed — blockade level confirmed'},
+    ...reversalSteps,
+    {id:'rev_give',grp:'Neuromuscular Reversal',txt:'Administer reversal agent',type:'act',badge:'act',detail:'Give agent IV. Monitor TOF for adequate recovery.',action:'Reversal administered'},
+    {id:'voff',grp:'Emergence Sequence',txt:'Turn volatile agent OFF',type:'act',badge:'act',detail:'Discontinue volatile anesthetic.',action:'Volatile off'},
+    {id:'fgf',grp:'Emergence Sequence',txt:'FGF >6 L/min · 100% FiO₂',type:'act',badge:'act',detail:'Increase O₂ to >6 L/min (100% FiO₂) to wash out volatile and denitrogenate.',action:'FGF >6 L/min, 100% FiO₂'},
+    {id:'bag',grp:'Emergence Sequence',txt:'Bag mode · APL open',type:'act',badge:'act',detail:'Switch to bag mode. Open APL valve. Support ventilation as needed.',action:'Bag mode — APL open'},
+    {id:'spont',grp:'Emergence Sequence',txt:'Verify spontaneous ventilation (Vt >300 ml)',type:'act',badge:'act',detail:'Watch capnograph for spontaneous effort. Confirm Vt >300 ml. Regular ETCO₂ waveform.',action:'Spontaneous ventilation confirmed — Vt >300 ml'},
+    {id:'s2',grp:'Emergence Sequence',txt:'Verify NOT in Stage 2 excitement',type:'act',badge:'crit',detail:'Eyes midline, regular RR, no bucking. Do NOT extubate during Stage 2.',action:'Stage 2 cleared — eyes midline, regular RR',critical:'Stage 2 = deviated eyes, irregular breathing, bucking. Wait for it to pass.'},
+    {id:'suct',grp:'Emergence Sequence',txt:'Suction oropharynx',type:'act',badge:'act',detail:'Yankauer suction to clear secretions before extubation.',action:'Oropharynx suctioned'},
+    {id:'ext',grp:'Extubation',txt:'Deflate cuff & extubate with positive pressure',type:'act',badge:'crit',detail:'Deflate ETT cuff. Give a positive pressure breath. Remove ETT on inspiration. Apply O₂ mask >6 L/min.',action:'Cuff deflated — extubated with positive pressure — O₂ mask applied',cb:()=>setVitals('post')},
+    {id:'verify',grp:'Extubation',txt:'Verify patent airway & SpO₂',type:'act',badge:'act',detail:'Confirm spontaneous breathing with patent airway. Verify ETCO₂ through mask.',action:'Airway patent, SpO₂ stable post-extubation'},
+  ];
+  return[];
+}
+function startMode(m){
+  mode=m;
+  patient={...PATIENTS[Math.floor(Math.random()*PATIENTS.length)]};
+  patient.kg=kgCalc(patient.lbs);
+  document.getElementById('screen-select').classList.remove('active');
+  document.getElementById('screen-results').classList.remove('active');
+  document.getElementById('screen-sim').classList.add('active');
+  const labels={lma:'LMA Induction',regular:'Regular Induction',rsi:'Rapid Sequence',emergence:'Emergence'};
+  document.getElementById('sim-label').textContent=labels[m];
+  document.getElementById('res-mode').textContent=labels[m];
+  document.getElementById('pt-name').textContent=patient.name;
+  document.getElementById('pt-proc').textContent=patient.proc;
+  document.getElementById('pt-age').textContent=patient.age;
+  document.getElementById('pt-lbs').textContent=patient.lbs+' lbs';
+  document.getElementById('pt-kg').textContent='— (calculate below)';
+  document.getElementById('pt-asa').textContent=patient.asa;
+  document.getElementById('pt-allergy').textContent=patient.allergy;
+  document.getElementById('pt-pmh').textContent=patient.pmh;
+  setVitals('none');
+  document.getElementById('wt-inp').value='';
+  document.getElementById('wt-fb').textContent='';
+  document.getElementById('wt-inp').className='wt-input';
+  document.getElementById('wt-box').style.display='block';
+  document.getElementById('steps').innerHTML='';
+  document.getElementById('prog').style.width='0%';
+  score={correct:0,total:0,drugErr:0};
+}
+function checkWt(){
+  const v=parseFloat(document.getElementById('wt-inp').value);
+  const c=patient.kg,fb=document.getElementById('wt-fb'),inp=document.getElementById('wt-inp');
+  if(!v){fb.textContent='';inp.className='wt-input';return;}
+  if(Math.abs(v-c)<=2){fb.innerHTML=`<span style="color:var(--success)">✓ ${c} kg</span>`;inp.className='wt-input ok';}
+  else{fb.innerHTML=`<span style="color:var(--danger)">✗ ${patient.lbs}÷2=${patient.lbs/2} → −10%</span>`;inp.className='wt-input err';}
+}
+function confirmWt(){
+  const v=parseFloat(document.getElementById('wt-inp').value);
+  if(Math.abs(v-patient.kg)>2){showToast('Incorrect weight. Check formula.','error');return;}
+  document.getElementById('pt-kg').textContent=patient.kg+' kg ✓';
+  document.getElementById('wt-box').style.display='none';
+  steps=buildSteps(mode,patient);
+  states=steps.map((_,i)=>i===0?'active':'locked');
+  render();
+}
+function render(){
+  const el=document.getElementById('steps');
+  el.innerHTML='';
+  const done=states.filter(s=>s==='completed').length;
+  document.getElementById('prog').style.width=`${(done/steps.length)*100}%`;
+  let grp='';
+  steps.forEach((s,i)=>{
+    if(s.grp!==grp){grp=s.grp;const g=document.createElement('div');g.className='grp-title';g.textContent=s.grp;el.appendChild(g);}
+    const d=document.createElement('div');d.className=`step ${states[i]}`;d.id=`s${i}`;
+    const icon={completed:'✓',failed:'✗',active:i+1,locked:i+1}[states[i]];
+    const badgeHtml=`<span class="badge ${s.badge}">${{calc:'CALCULATE',act:'ACTION',crit:'CRITICAL'}[s.badge]}</span>`;
+    d.innerHTML=`<div class="step-hdr"><div class="step-num">${icon}</div><div class="step-txt">${s.txt}</div>${badgeHtml}</div>`;
+    if(states[i]==='active'){
+      const b=document.createElement('div');b.className='step-body';b.innerHTML=bodyHTML(s,i);d.appendChild(b);
+      setTimeout(()=>d.scrollIntoView({behavior:'smooth',block:'nearest'}),80);
+    }
+    el.appendChild(d);
+  });
+}
+function bodyHTML(s,i){
+  if(s.type==='drug'){
+    const d=s.drug;
+    const scenarioBanner = s.revScenario
+      ? `<div style="background:#1a2a1a;border:1px solid #2a4a2a;border-radius:6px;padding:10px 12px;font-size:12px;color:#86efac;margin-bottom:10px;white-space:pre-line;font-family:var(--mono);">${s.revScenario}</div>`
+      : '';
+    return`<div class="drug-box">
+      ${scenarioBanner}
+      <div class="drug-header"><div class="drug-name">${d.name}</div><div class="drug-formula">${d.formula}</div></div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">Patient: <strong style="color:var(--text)">${patient.kg} kg</strong></div>
+      <div class="drug-inputs">
+        <div class="d-inp-grp"><div class="d-inp-lbl">Dose (${d.du})</div><input class="d-inp" id="d${i}" type="number" step="0.1" inputmode="decimal" oninput="chkDrug(${i})"><div class="d-fb" id="df${i}"></div></div>
+        <div class="d-inp-grp"><div class="d-inp-lbl">Volume (${d.vu})</div><input class="d-inp" id="v${i}" type="number" step="0.01" inputmode="decimal" oninput="chkDrug(${i})"><div class="d-fb" id="vf${i}"></div></div>
+      </div>
+      <button class="btn-check" onclick="submitDrug(${i})">Confirm &amp; Administer →</button>
+    </div>`;
+  }
+  let h='';
+  if(s.detail) h+=`<div class="step-detail">${s.detail}</div>`;
+  if(s.critical) h+=`<div class="crit-alert">⚠️ ${s.critical}</div>`;
+  h+=`<button class="btn-primary" onclick="doAction(${i})">${s.action||'Mark Complete'} →</button>`;
+  return h;
+}
+function chkDrug(i){
+  const s=steps[i],d=s.drug;
+  const dv=parseFloat(document.getElementById('d'+i)?.value);
+  const vv=parseFloat(document.getElementById('v'+i)?.value);
+  const tok=(v,mn,mx)=>!isNaN(v)&&v>=mn*.95&&v<=mx*1.05;
+  if(!isNaN(dv)){const ok=tok(dv,d.min,d.max);document.getElementById('df'+i).textContent=ok?'✓':'✗ recheck';document.getElementById('df'+i).className=ok?'d-fb ok':'d-fb err';document.getElementById('d'+i).className=ok?'d-inp ok':'d-inp err';}
+  if(!isNaN(vv)){const ok=tok(vv,d.vmin,d.vmax);document.getElementById('vf'+i).textContent=ok?'✓':'✗ recheck';document.getElementById('vf'+i).className=ok?'d-fb ok':'d-fb err';document.getElementById('v'+i).className=ok?'d-inp ok':'d-inp err';}
+}
+function submitDrug(i){
+  const s=steps[i],d=s.drug;
+  const dv=parseFloat(document.getElementById('d'+i)?.value);
+  const vv=parseFloat(document.getElementById('v'+i)?.value);
+  const tok=(v,mn,mx)=>!isNaN(v)&&v>=mn*.95&&v<=mx*1.05;
+  const dok=tok(dv,d.min,d.max),vok=tok(vv,d.vmin,d.vmax);
+  score.total++;
+  if(dok&&vok){score.correct++;showToast(`✓ ${d.name} correct!`,'success');advance(i,true);}
+  else{
+    score.drugErr++;
+    const r=x=>Math.round(x*100)/100;
+    const dS=d.min===d.max?`${r(d.min)}`:`${r(d.min)}–${r(d.max)}`;
+    const vS=d.vmin===d.vmax?`${r(d.vmin)}`:`${r(d.vmin)}–${r(d.vmax)}`;
+    showToast(`✗ Correct: ${dS} ${d.du} / ${vS} ml`,'error');
+    setTimeout(()=>{if(confirm(`Correct dose: ${dS} ${d.du}\nCorrect volume: ${vS} ml\n\nContinue?`))advance(i,false);},600);
+  }
+}
+function doAction(i){
+  score.total++;score.correct++;
+  if(steps[i].cb) steps[i].cb();
+  advance(i,true);
+}
+function advance(i,ok){
+  states[i]=ok?'completed':'failed';
+  const n=i+1;
+  if(n<steps.length){states[n]='active';}
+  else{setTimeout(showResults,500);render();return;}
+  render();
+}
+function showResults(){
+  document.getElementById('screen-sim').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+  const pct=score.total>0?Math.round((score.correct/score.total)*100):100;
+  const pass=pct>=80;
+  document.getElementById('score-pct').textContent=pct+'%';
+  document.getElementById('score-pct').style.color=pass?'var(--success)':'var(--danger)';
+  document.getElementById('score-verdict').textContent=pass?'PASS':'REMEDIATION';
+  const arc=document.getElementById('score-arc');
+  arc.style.strokeDashoffset=351.9-(351.9*pct/100);
+  arc.style.stroke=pass?'var(--accent)':'var(--danger)';
+  const labels={lma:'LMA Induction',regular:'Regular Induction',rsi:'Rapid Sequence',emergence:'Emergence'};
+  document.getElementById('res-table').innerHTML=`
+    <div class="res-row"><span class="res-lbl">Mode</span><span class="res-val">${labels[mode]}</span></div>
+    <div class="res-row"><span class="res-lbl">Patient</span><span class="res-val">${patient.name} · ${patient.kg} kg</span></div>
+    <div class="res-row"><span class="res-lbl">Steps</span><span class="res-val">${score.correct} / ${score.total}</span></div>
+    <div class="res-row"><span class="res-lbl">Drug errors</span><span class="res-val" style="color:${score.drugErr>0?'var(--danger)':'var(--success)'}">${score.drugErr}</span></div>
+    <div class="res-row"><span class="res-lbl">Verdict</span><span class="res-val" style="color:${pass?'var(--success)':'var(--danger)'}">${pass?'✓ PASS':'✗ Remediate'}</span></div>
+  `;
+}
+function retryMode(){startMode(mode);}
+function showSelect(){
+  document.getElementById('screen-sim').classList.remove('active');
+  document.getElementById('screen-results').classList.remove('active');
+  document.getElementById('screen-select').classList.add('active');
+}
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${type} show`;
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
