@@ -86,6 +86,7 @@
   .d-inp.err{border-color:var(--danger);color:var(--danger);}
   .d-fb{font-size:11px;height:16px;font-family:var(--mono);}
   .d-fb.ok{color:var(--success);} .d-fb.err{color:var(--danger);}
+  .mcq-fb{font-size:12px;margin-top:10px;}
 
   .btn-primary{display:flex;align-items:center;justify-content:center;background:var(--accent);color:#000;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;}
   .btn-primary:active{opacity:.8;}
@@ -109,8 +110,9 @@
   .tag-eme{background:#2d1a3a;color:#c084fc;}
   .tag-preop{background:#4a3520;color:#fbbf24;}
   .mcq-opt{text-align:left;}
-  .mcq-opt.correct{border-color:var(--success)!important;background:#0a1f18!important;color:var(--success)!important;}
-  .mcq-opt.wrong{border-color:var(--danger)!important;background:#1f0a0a!important;color:var(--danger)!important;}
+  .mcq-opt:disabled{opacity:.55;cursor:default;}
+  .mcq-opt.correct{border-color:var(--success)!important;background:#0a1f18!important;color:var(--success)!important;opacity:1!important;}
+  .mcq-opt.wrong{border-color:var(--danger)!important;background:#1f0a0a!important;color:var(--danger)!important;opacity:1!important;}
   .mode-name{font-size:16px;font-weight:700;}
   .mode-desc{font-size:12px;color:var(--muted);line-height:1.4;}
   .mode-arrow{font-size:18px;color:var(--muted);flex-shrink:0;}
@@ -433,22 +435,27 @@ function buildSteps(m,pt){
   if(m==='preop') return[
     {id:'asa1',grp:'Preoperative Assessment',txt:'Determine ASA Physical Status Classification',type:'mcq',badge:'calc',
       mcq:{question:'Based on the patient\'s age, procedure, and PMH shown in the patient card above, select the correct ASA Physical Status Classification.',
-        options:['ASA I','ASA II','ASA III','ASA IV','ASA V'],correct:pt.asa}},
+        options:['ASA I','ASA II','ASA III','ASA IV','ASA V'],correct:pt.asa,
+        explain:'ASA I = normal healthy patient. ASA II = mild systemic disease, no functional limitation (e.g. well-controlled HTN/DM, mild obesity). ASA III = severe systemic disease WITH functional limitation (e.g. poorly controlled DM, OSA, prior MI). ASA IV = severe systemic disease that is a constant threat to life (e.g. recent MI, low EF, unstable angina). ASA V = moribund, not expected to survive without surgery.<br><br>This patient\'s PMH — "'+pt.pmh+'" — makes them '+pt.asa+'.'}},
     {id:'mp1',grp:'Airway Exam',txt:'Classify the Mallampati score',type:'mcq',badge:'calc',
       mcq:{question:'On oral exam with the patient seated, tongue protruded, phonating "ahh": '+MP_DESC[pt.mallampati]+'. What Mallampati class is this?',
-        options:['Class I','Class II','Class III','Class IV'],correct:mpLabel(pt.mallampati)}},
+        options:['Class I','Class II','Class III','Class IV'],correct:mpLabel(pt.mallampati),
+        explain:'Mallampati grades what\'s visible with the mouth fully open and tongue out: Class I = soft palate, uvula, fauces, AND pillars all visible. Class II = soft palate, uvula, fauces visible, but NOT the pillars. Class III = only the soft palate and base of the uvula visible. Class IV = soft palate not visible at all — only the hard palate.<br><br>This exam showed: "'+MP_DESC[pt.mallampati]+'" → '+mpLabel(pt.mallampati)+'.'}},
     {id:'tmd1',grp:'Airway Exam',txt:'Interpret the thyromental distance',type:'mcq',badge:'calc',
       mcq:{question:'Thyromental distance (thyroid notch to chin tip, neck fully extended) measures '+pt.tmd+' cm. Is this within normal limits?',
         options:['Normal (≥6 cm) — reassuring for laryngoscopy','Reduced (<6 cm) — predicts possible difficult laryngoscopy'],
-        correct:pt.tmd>=6?'Normal (≥6 cm) — reassuring for laryngoscopy':'Reduced (<6 cm) — predicts possible difficult laryngoscopy'}},
+        correct:pt.tmd>=6?'Normal (≥6 cm) — reassuring for laryngoscopy':'Reduced (<6 cm) — predicts possible difficult laryngoscopy',
+        explain:'A thyromental distance under 6 cm means there\'s less mandibular space to displace the tongue into during laryngoscopy, which correlates with a more anterior, harder-to-visualize airway. This patient measured '+pt.tmd+' cm, which is '+(pt.tmd>=6?'≥6 cm — normal.':'<6 cm — reduced.')}},
     {id:'airway1',grp:'Airway Exam',txt:'Synthesize overall airway risk',type:'mcq',badge:'crit',
       mcq:{question:'Putting it together — Mallampati '+mpLabel(pt.mallampati)+', TMD '+pt.tmd+' cm, mouth opening '+pt.mouthOpening+' cm, neck mobility: "'+pt.neckMobility+'". What is the overall airway assessment?',
         options:['Normal airway — routine approach anticipated','Potentially difficult airway — have backup airway equipment & plan ready'],
-        correct:isDifficultAirway(pt)?'Potentially difficult airway — have backup airway equipment & plan ready':'Normal airway — routine approach anticipated'}},
+        correct:isDifficultAirway(pt)?'Potentially difficult airway — have backup airway equipment & plan ready':'Normal airway — routine approach anticipated',
+        explain:'Any ONE of the following is enough to flag a potentially difficult airway: Mallampati III/IV, TMD <6 cm, mouth opening (interincisor gap) <3 cm, or limited neck mobility. This patient had Mallampati '+mpLabel(pt.mallampati)+', TMD '+pt.tmd+' cm, mouth opening '+pt.mouthOpening+' cm, and neck mobility "'+pt.neckMobility+'" — '+(isDifficultAirway(pt)?'which meets at least one difficult-airway criterion.':'none of which meet a difficult-airway criterion.')}},
     {id:'npo1',grp:'Preoperative Assessment',txt:'Assess fasting (NPO) status',type:'mcq',badge:'calc',
       mcq:{question:'Fasting history: "'+pt.npo+'". Does this patient meet standard ASA fasting guidelines for an elective case, or should they be treated with full-stomach precautions?',
         options:['Meets NPO guidelines — standard induction appropriate','Does NOT meet NPO guidelines — treat as full stomach / consider RSI'],
-        correct:/unclear|not npo|emergent/i.test(pt.npo)?'Does NOT meet NPO guidelines — treat as full stomach / consider RSI':'Meets NPO guidelines — standard induction appropriate'}},
+        correct:/unclear|not npo|emergent/i.test(pt.npo)?'Does NOT meet NPO guidelines — treat as full stomach / consider RSI':'Meets NPO guidelines — standard induction appropriate',
+        explain:'Standard ASA fasting guidelines: clear liquids up to 2 hrs, breast milk 4 hrs, light meal/infant formula 6 hrs, full meal 8 hrs before an elective case. If the fasting history is unclear, absent, or the case is emergent, you can\'t assume an empty stomach — treat it as a full stomach (aspiration precautions / consider RSI).<br><br>This patient\'s history: "'+pt.npo+'".'}},
   ];
   return[];
 }
@@ -537,7 +544,7 @@ function bodyHTML(s,i){
   if(s.type==='mcq'){
     const q=s.mcq;
     const opts=q.options.map((o,idx)=>`<button class="btn-secondary mcq-opt" id="mcq${i}_${idx}" onclick="submitMCQ(${i},${idx})">${o}</button>`).join('');
-    return`<div class="step-detail">${q.question}</div>${opts}<div class="d-fb" id="mcqfb${i}" style="margin-top:8px;"></div>`;
+    return`<div class="step-detail">${q.question}</div>${opts}<div id="mcqfb${i}" class="mcq-fb"></div>`;
   }
   if(s.type==='drug'){
     const d=s.drug;
@@ -593,18 +600,24 @@ function submitMCQ(i,idx){
     const btn=document.getElementById(`mcq${i}_${oi}`);
     if(!btn) return;
     btn.onclick=null;
+    btn.disabled=true;
     if(o===q.correct) btn.classList.add('correct');
     else if(oi===idx) btn.classList.add('wrong');
   });
   const chosen=q.options[idx];
   const ok=chosen===q.correct;
   score.total++;
-  if(ok){score.correct++;showToast('✓ Correct','success');}
-  else{showToast('✗ Correct: '+q.correct,'error');}
+  if(ok) score.correct++;
   if(s.id==='asa1') document.getElementById('pt-asa').textContent=patient.asa;
   const fb=document.getElementById('mcqfb'+i);
-  if(fb) fb.innerHTML=ok?'<span style="color:var(--success)">✓ Correct</span>':`<span style="color:var(--danger)">✗ Correct answer: ${q.correct}</span>`;
-  setTimeout(()=>advance(i,ok),900);
+  const resultLine=ok
+    ? `<div style="color:var(--success);font-weight:700;font-size:13px;margin-bottom:8px;">✓ Correct — ${q.correct}</div>`
+    : `<div style="color:var(--danger);font-weight:700;font-size:13px;margin-bottom:8px;">✗ Incorrect — you selected "${chosen}"<br>Correct answer: ${q.correct}</div>`;
+  const explainHtml=q.explain?`<div class="step-detail" style="background:#0a1525;border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:10px;">${q.explain}</div>`:'';
+  if(fb){
+    fb.innerHTML=`${resultLine}${explainHtml}<button class="btn-primary" onclick="advance(${i},${ok})">Acknowledge &amp; Continue →</button>`;
+    setTimeout(()=>fb.scrollIntoView({behavior:'smooth',block:'nearest'}),80);
+  }
 }
 function doAction(i){
   score.total++;score.correct++;
