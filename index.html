@@ -107,6 +107,10 @@
   .tag-rsi{background:#3a1a1a;color:#f87171;}
   .tag-reg{background:#1a3020;color:#34d399;}
   .tag-eme{background:#2d1a3a;color:#c084fc;}
+  .tag-preop{background:#4a3520;color:#fbbf24;}
+  .mcq-opt{text-align:left;}
+  .mcq-opt.correct{border-color:var(--success)!important;background:#0a1f18!important;color:var(--success)!important;}
+  .mcq-opt.wrong{border-color:var(--danger)!important;background:#1f0a0a!important;color:var(--danger)!important;}
   .mode-name{font-size:16px;font-weight:700;}
   .mode-desc{font-size:12px;color:var(--muted);line-height:1.4;}
   .mode-arrow{font-size:18px;color:var(--muted);flex-shrink:0;}
@@ -177,6 +181,15 @@
       </div>
       <div class="mode-arrow">›</div>
     </div>
+    <div class="mode-card" onclick="startMode('preop')">
+      <div class="mode-icon">📋</div>
+      <div class="mode-info">
+        <div class="mode-tag tag-preop">PreOp</div>
+        <div class="mode-name">PreOp Assessment</div>
+        <div class="mode-desc">ASA class · Mallampati · Thyromental distance · Airway risk</div>
+      </div>
+      <div class="mode-arrow">›</div>
+    </div>
   </div>
 </div>
 
@@ -205,6 +218,17 @@
       <div class="pt-item"><span class="pt-lbl">Weight (kg)</span><span class="pt-val" id="pt-kg">—</span></div>
       <div class="pt-item"><span class="pt-lbl">Allergies</span><span class="pt-val" id="pt-allergy">—</span></div>
       <div class="pt-item"><span class="pt-lbl">PMH</span><span class="pt-val" id="pt-pmh">—</span></div>
+    </div>
+  </div>
+
+  <div class="pt-card" id="preop-card" style="display:none">
+    <div class="pt-name">🔍 Airway &amp; PreOp Exam Findings</div>
+    <div class="pt-proc" id="pre-npo">—</div>
+    <div class="pt-grid">
+      <div class="pt-item"><span class="pt-lbl">Oropharyngeal View</span><span class="pt-val" id="pre-mp">—</span></div>
+      <div class="pt-item"><span class="pt-lbl">Thyromental Distance</span><span class="pt-val" id="pre-tmd">—</span></div>
+      <div class="pt-item"><span class="pt-lbl">Mouth Opening</span><span class="pt-val" id="pre-mo">—</span></div>
+      <div class="pt-item"><span class="pt-lbl">Neck Mobility</span><span class="pt-val" id="pre-neck">—</span></div>
     </div>
   </div>
 
@@ -249,15 +273,39 @@ Example: 180 lbs ÷ 2 = 90 → 90 − 9 = <strong style="color:var(--text)">81 k
 </div>
 
 <script>
+const MP_DESC={
+  1:"Soft palate, uvula, fauces, and both tonsillar pillars fully visible",
+  2:"Soft palate, uvula, and fauces visible; tonsillar pillars NOT visible",
+  3:"Only soft palate and base of uvula visible",
+  4:"Soft palate not visible at all — only hard palate seen"
+};
 const PATIENTS=[
-  {name:"Margaret Holt",age:"58 F",lbs:160,proc:"Laparoscopic cholecystectomy",asa:"ASA II",allergy:"NKDA",pmh:"HTN, GERD"},
-  {name:"James Ortega",age:"42 M",lbs:200,proc:"Right knee arthroscopy",asa:"ASA I",allergy:"Penicillin",pmh:"None"},
-  {name:"Patricia Webb",age:"67 F",lbs:180,proc:"Inguinal hernia repair",asa:"ASA III",allergy:"Sulfa",pmh:"DM2, HTN, OSA"},
-  {name:"Dennis Park",age:"35 M",lbs:220,proc:"Appendectomy",asa:"ASA II",allergy:"NKDA",pmh:"Anxiety"},
-  {name:"Linda Castillo",age:"51 F",lbs:145,proc:"Thyroidectomy",asa:"ASA II",allergy:"Latex",pmh:"Hypothyroidism"},
+  {name:"Margaret Holt",age:"58 F",lbs:160,proc:"Laparoscopic cholecystectomy",asa:"ASA II",allergy:"NKDA",pmh:"HTN, GERD — both well controlled on meds",npo:"NPO 9 hrs, clear liquids until 3 hrs ago",mallampati:2,tmd:7,mouthOpening:4,neckMobility:"Full range"},
+  {name:"James Ortega",age:"42 M",lbs:200,proc:"Right knee arthroscopy",asa:"ASA I",allergy:"Penicillin",pmh:"None — healthy, no chronic disease",npo:"NPO 8 hrs, no PO since midnight",mallampati:1,tmd:8,mouthOpening:4.5,neckMobility:"Full range"},
+  {name:"Patricia Webb",age:"67 F",lbs:180,proc:"Inguinal hernia repair",asa:"ASA III",allergy:"Sulfa",pmh:"DM2 (on insulin), HTN, OSA on home CPAP",npo:"NPO 8 hrs",mallampati:3,tmd:5,mouthOpening:3,neckMobility:"Limited extension — cervical arthritis"},
+  {name:"Dennis Park",age:"35 M",lbs:220,proc:"Appendectomy",asa:"ASA II",allergy:"NKDA",pmh:"Generalized anxiety disorder, otherwise healthy",npo:"Unclear last meal — possible full stomach, urgent case",mallampati:2,tmd:6.5,mouthOpening:4,neckMobility:"Full range"},
+  {name:"Linda Castillo",age:"51 F",lbs:145,proc:"Thyroidectomy",asa:"ASA II",allergy:"Latex",pmh:"Hypothyroidism, controlled; visible goiter with tracheal deviation",npo:"NPO 10 hrs",mallampati:3,tmd:5.5,mouthOpening:4,neckMobility:"Limited — goiter restricts extension"},
+  {name:"Robert Nguyen",age:"29 M",lbs:175,proc:"ORIF ankle fracture",asa:"ASA I",allergy:"NKDA",pmh:"None — healthy athlete",npo:"NPO 8 hrs",mallampati:1,tmd:8,mouthOpening:5,neckMobility:"Full range"},
+  {name:"Carol Simmons",age:"73 F",lbs:130,proc:"Cataract extraction",asa:"ASA III",allergy:"NKDA",pmh:"CAD s/p stent, HTN, mild COPD",npo:"NPO 8 hrs",mallampati:2,tmd:6.5,mouthOpening:4,neckMobility:"Full range"},
+  {name:"Michael Torres",age:"45 M",lbs:265,proc:"Laparoscopic gastric bypass",asa:"ASA III",allergy:"NKDA",pmh:"Morbid obesity (BMI 42), severe OSA, HTN, GERD",npo:"NPO 8 hrs",mallampati:4,tmd:4.5,mouthOpening:2.5,neckMobility:"Limited — thick short neck"},
+  {name:"Susan Blake",age:"62 F",lbs:150,proc:"Left mastectomy",asa:"ASA II",allergy:"NKDA",pmh:"Breast CA, mild situational anxiety",npo:"NPO 9 hrs",mallampati:1,tmd:7,mouthOpening:4,neckMobility:"Full range"},
+  {name:"William Freeman",age:"55 M",lbs:190,proc:"Coronary artery bypass graft",asa:"ASA IV",allergy:"NKDA",pmh:"Severe CAD, EF 30%, HTN, DM2, recent NSTEMI",npo:"NPO 8 hrs",mallampati:2,tmd:7,mouthOpening:4,neckMobility:"Full range"},
+  {name:"Angela Brooks",age:"33 F",lbs:135,proc:"Exploratory laparotomy — ruptured ectopic pregnancy",asa:"ASA II",allergy:"NKDA",pmh:"Otherwise healthy — emergent case, hemodynamically stable",npo:"Not NPO — emergent, full stomach precautions",mallampati:1,tmd:7,mouthOpening:4,neckMobility:"Full range"},
+  {name:"Harold Kim",age:"70 M",lbs:210,proc:"Transurethral resection of the prostate",asa:"ASA III",allergy:"NKDA",pmh:"CKD stage 3, HTN, DM2, prior MI 5 yrs ago",npo:"NPO 8 hrs",mallampati:3,tmd:5.5,mouthOpening:3.5,neckMobility:"Limited — c-spine arthritis"},
+  {name:"Nina Patel",age:"39 F",lbs:155,proc:"Laparoscopic tubal ligation",asa:"ASA I",allergy:"NKDA",pmh:"None — healthy",npo:"NPO 8 hrs",mallampati:1,tmd:7.5,mouthOpening:4.5,neckMobility:"Full range"},
+  {name:"George Alvarez",age:"48 M",lbs:245,proc:"Umbilical hernia repair",asa:"ASA II",allergy:"NKDA",pmh:"Obesity (BMI 33), mild GERD",npo:"NPO 8 hrs",mallampati:3,tmd:6,mouthOpening:3.5,neckMobility:"Full range"},
+  {name:"Betty Chow",age:"81 F",lbs:120,proc:"Hip hemiarthroplasty",asa:"ASA III",allergy:"Codeine",pmh:"Osteoporosis, HTN, mild dementia, fall with hip fracture",npo:"NPO 6 hrs — semi-urgent",mallampati:2,tmd:6,mouthOpening:3.5,neckMobility:"Limited — advanced age, kyphosis"},
 ];
 let mode,patient,steps,states,score;
 function kgCalc(lbs){return Math.round((lbs/2)*0.9);}
+function jitterLbs(base){
+  const delta=(Math.floor(Math.random()*7)-3)*5; // -15..+15 in steps of 5
+  return Math.max(95,base+delta);
+}
+function mpLabel(n){return 'Class '+['','I','II','III','IV'][n];}
+function isDifficultAirway(pt){
+  return pt.mallampati>=3 || pt.tmd<6 || pt.mouthOpening<3 || pt.neckMobility.startsWith('Limited');
+}
 function setVitals(phase){
   const v={pre:{spo2:'98',nibp:'128/82',hr:'74',etco2:'—'},maintained:{spo2:'100',nibp:'110/70',hr:'68',etco2:'35'},intubated:{spo2:'100',nibp:'108/68',hr:'65',etco2:'38'},post:{spo2:'97',nibp:'132/86',hr:'82',etco2:'42'}}[phase]||{spo2:'—',nibp:'—',hr:'—',etco2:'—'};
   ['spo2','nibp','hr','etco2'].forEach(k=>document.getElementById('v-'+k).textContent=v[k]);
@@ -382,34 +430,73 @@ function buildSteps(m,pt){
     {id:'ext',grp:'Extubation',txt:'Deflate cuff & extubate with positive pressure',type:'act',badge:'crit',detail:'Deflate ETT cuff. Give a positive pressure breath. Remove ETT on inspiration. Apply O₂ mask >6 L/min.',action:'Cuff deflated — extubated with positive pressure — O₂ mask applied',cb:()=>setVitals('post')},
     {id:'verify',grp:'Extubation',txt:'Verify patent airway & SpO₂',type:'act',badge:'act',detail:'Confirm spontaneous breathing with patent airway. Verify ETCO₂ through mask.',action:'Airway patent, SpO₂ stable post-extubation'},
   ];
+  if(m==='preop') return[
+    {id:'asa1',grp:'Preoperative Assessment',txt:'Determine ASA Physical Status Classification',type:'mcq',badge:'calc',
+      mcq:{question:'Based on the patient\'s age, procedure, and PMH shown in the patient card above, select the correct ASA Physical Status Classification.',
+        options:['ASA I','ASA II','ASA III','ASA IV','ASA V'],correct:pt.asa}},
+    {id:'mp1',grp:'Airway Exam',txt:'Classify the Mallampati score',type:'mcq',badge:'calc',
+      mcq:{question:'On oral exam with the patient seated, tongue protruded, phonating "ahh": '+MP_DESC[pt.mallampati]+'. What Mallampati class is this?',
+        options:['Class I','Class II','Class III','Class IV'],correct:mpLabel(pt.mallampati)}},
+    {id:'tmd1',grp:'Airway Exam',txt:'Interpret the thyromental distance',type:'mcq',badge:'calc',
+      mcq:{question:'Thyromental distance (thyroid notch to chin tip, neck fully extended) measures '+pt.tmd+' cm. Is this within normal limits?',
+        options:['Normal (≥6 cm) — reassuring for laryngoscopy','Reduced (<6 cm) — predicts possible difficult laryngoscopy'],
+        correct:pt.tmd>=6?'Normal (≥6 cm) — reassuring for laryngoscopy':'Reduced (<6 cm) — predicts possible difficult laryngoscopy'}},
+    {id:'airway1',grp:'Airway Exam',txt:'Synthesize overall airway risk',type:'mcq',badge:'crit',
+      mcq:{question:'Putting it together — Mallampati '+mpLabel(pt.mallampati)+', TMD '+pt.tmd+' cm, mouth opening '+pt.mouthOpening+' cm, neck mobility: "'+pt.neckMobility+'". What is the overall airway assessment?',
+        options:['Normal airway — routine approach anticipated','Potentially difficult airway — have backup airway equipment & plan ready'],
+        correct:isDifficultAirway(pt)?'Potentially difficult airway — have backup airway equipment & plan ready':'Normal airway — routine approach anticipated'}},
+    {id:'npo1',grp:'Preoperative Assessment',txt:'Assess fasting (NPO) status',type:'mcq',badge:'calc',
+      mcq:{question:'Fasting history: "'+pt.npo+'". Does this patient meet standard ASA fasting guidelines for an elective case, or should they be treated with full-stomach precautions?',
+        options:['Meets NPO guidelines — standard induction appropriate','Does NOT meet NPO guidelines — treat as full stomach / consider RSI'],
+        correct:/unclear|not npo|emergent/i.test(pt.npo)?'Does NOT meet NPO guidelines — treat as full stomach / consider RSI':'Meets NPO guidelines — standard induction appropriate'}},
+  ];
   return[];
 }
 function startMode(m){
   mode=m;
   patient={...PATIENTS[Math.floor(Math.random()*PATIENTS.length)]};
+  patient.lbs=jitterLbs(patient.lbs);
   patient.kg=kgCalc(patient.lbs);
   document.getElementById('screen-select').classList.remove('active');
   document.getElementById('screen-results').classList.remove('active');
   document.getElementById('screen-sim').classList.add('active');
-  const labels={lma:'LMA Induction',regular:'Regular Induction',rsi:'Rapid Sequence',emergence:'Emergence'};
+  const labels={lma:'LMA Induction',regular:'Regular Induction',rsi:'Rapid Sequence',emergence:'Emergence',preop:'PreOp Assessment'};
   document.getElementById('sim-label').textContent=labels[m];
   document.getElementById('res-mode').textContent=labels[m];
   document.getElementById('pt-name').textContent=patient.name;
   document.getElementById('pt-proc').textContent=patient.proc;
   document.getElementById('pt-age').textContent=patient.age;
   document.getElementById('pt-lbs').textContent=patient.lbs+' lbs';
-  document.getElementById('pt-kg').textContent='— (calculate below)';
-  document.getElementById('pt-asa').textContent=patient.asa;
   document.getElementById('pt-allergy').textContent=patient.allergy;
   document.getElementById('pt-pmh').textContent=patient.pmh;
   setVitals('none');
-  document.getElementById('wt-inp').value='';
-  document.getElementById('wt-fb').textContent='';
-  document.getElementById('wt-inp').className='wt-input';
-  document.getElementById('wt-box').style.display='block';
   document.getElementById('steps').innerHTML='';
   document.getElementById('prog').style.width='0%';
   score={correct:0,total:0,drugErr:0};
+
+  if(m==='preop'){
+    // No weight-calc gate needed for preop assessment — jump straight to steps
+    document.getElementById('pt-kg').textContent=patient.kg+' kg';
+    document.getElementById('pt-asa').textContent='?'; // withhold answer until step 1 is answered
+    document.getElementById('wt-box').style.display='none';
+    document.getElementById('preop-card').style.display='block';
+    document.getElementById('pre-npo').textContent='Fasting: '+patient.npo;
+    document.getElementById('pre-mp').textContent=MP_DESC[patient.mallampati];
+    document.getElementById('pre-tmd').textContent=patient.tmd+' cm';
+    document.getElementById('pre-mo').textContent=patient.mouthOpening+' cm';
+    document.getElementById('pre-neck').textContent=patient.neckMobility;
+    steps=buildSteps(m,patient);
+    states=steps.map((_,i)=>i===0?'active':'locked');
+    render();
+  }else{
+    document.getElementById('pt-kg').textContent='— (calculate below)';
+    document.getElementById('pt-asa').textContent=patient.asa;
+    document.getElementById('preop-card').style.display='none';
+    document.getElementById('wt-inp').value='';
+    document.getElementById('wt-fb').textContent='';
+    document.getElementById('wt-inp').className='wt-input';
+    document.getElementById('wt-box').style.display='block';
+  }
 }
 function checkWt(){
   const v=parseFloat(document.getElementById('wt-inp').value);
@@ -447,6 +534,11 @@ function render(){
   });
 }
 function bodyHTML(s,i){
+  if(s.type==='mcq'){
+    const q=s.mcq;
+    const opts=q.options.map((o,idx)=>`<button class="btn-secondary mcq-opt" id="mcq${i}_${idx}" onclick="submitMCQ(${i},${idx})">${o}</button>`).join('');
+    return`<div class="step-detail">${q.question}</div>${opts}<div class="d-fb" id="mcqfb${i}" style="margin-top:8px;"></div>`;
+  }
   if(s.type==='drug'){
     const d=s.drug;
     const scenarioBanner = s.revScenario
@@ -494,6 +586,26 @@ function submitDrug(i){
     setTimeout(()=>{if(confirm(`Correct dose: ${dS} ${d.du}\nCorrect volume: ${vS} ml\n\nContinue?`))advance(i,false);},600);
   }
 }
+function submitMCQ(i,idx){
+  const s=steps[i],q=s.mcq;
+  // lock all option buttons and mark chosen/correct
+  q.options.forEach((o,oi)=>{
+    const btn=document.getElementById(`mcq${i}_${oi}`);
+    if(!btn) return;
+    btn.onclick=null;
+    if(o===q.correct) btn.classList.add('correct');
+    else if(oi===idx) btn.classList.add('wrong');
+  });
+  const chosen=q.options[idx];
+  const ok=chosen===q.correct;
+  score.total++;
+  if(ok){score.correct++;showToast('✓ Correct','success');}
+  else{showToast('✗ Correct: '+q.correct,'error');}
+  if(s.id==='asa1') document.getElementById('pt-asa').textContent=patient.asa;
+  const fb=document.getElementById('mcqfb'+i);
+  if(fb) fb.innerHTML=ok?'<span style="color:var(--success)">✓ Correct</span>':`<span style="color:var(--danger)">✗ Correct answer: ${q.correct}</span>`;
+  setTimeout(()=>advance(i,ok),900);
+}
 function doAction(i){
   score.total++;score.correct++;
   if(steps[i].cb) steps[i].cb();
@@ -517,7 +629,7 @@ function showResults(){
   const arc=document.getElementById('score-arc');
   arc.style.strokeDashoffset=351.9-(351.9*pct/100);
   arc.style.stroke=pass?'var(--accent)':'var(--danger)';
-  const labels={lma:'LMA Induction',regular:'Regular Induction',rsi:'Rapid Sequence',emergence:'Emergence'};
+  const labels={lma:'LMA Induction',regular:'Regular Induction',rsi:'Rapid Sequence',emergence:'Emergence',preop:'PreOp Assessment'};
   document.getElementById('res-table').innerHTML=`
     <div class="res-row"><span class="res-lbl">Mode</span><span class="res-val">${labels[mode]}</span></div>
     <div class="res-row"><span class="res-lbl">Patient</span><span class="res-val">${patient.name} · ${patient.kg} kg</span></div>
