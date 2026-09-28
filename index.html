@@ -2174,6 +2174,26 @@ Object.keys(_nx).forEach(k=>{
     return r;
   };
 });
+// iPad/Safari safeguard: if the page suddenly snaps to the top (a big instant jump,
+// not a normal finger scroll) and we did not navigate, snap back to where the user was.
+(function(){
+  let lastY = window.scrollY, navUntil = 0;
+  const active = () => document.getElementById("screen-neuro").classList.contains("active");
+  ["goStep","nextStep","prevStep","newScenario"].forEach(k=>{
+    const f = window.NX[k];
+    window.NX[k] = function(){ navUntil = Date.now()+1800; return f.apply(this, arguments); };
+  });
+  window.addEventListener("scroll", function(){
+    const y = window.scrollY;
+    if(active() && Date.now() > navUntil && lastY > 150 && y < 5 && (lastY - y) > 150){
+      const target = lastY;
+      window.scrollTo(0, target);
+      requestAnimationFrame(()=>window.scrollTo(0, target));
+      return;   // keep lastY as the good position
+    }
+    lastY = y;
+  }, {passive:true});
+})();
 // radio/checkbox selections: hold position too
 document.getElementById("neuro-app").addEventListener("change",function(){
   const y=window.scrollY;
