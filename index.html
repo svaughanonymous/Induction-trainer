@@ -1042,8 +1042,8 @@ function generateScenario(){
 }
 
 /* ============================= STATE ============================= */
-const STEP_KEYS = ["chart","assessment","preinduction","airway","meds","maintenance","emergence","summary"];
-const STEP_LABELS = ["Patient Chart","Assessment & Plan","Pre-Induction","Airway & Induction","Medications","Maintenance & Hemodynamics","Emergence","Summary"];
+const STEP_KEYS = ["chart","assessment","preinduction","meds","airway","maintenance","emergence","summary"];
+const STEP_LABELS = ["Patient Chart","Assessment & Plan","Pre-Induction","Induction Medications","Airway Management","Maintenance & Hemodynamics","Emergence","Summary"];
 
 let state = { scenario:null, stepIndex:0, graded:{}, assessmentAnswered:false };
 
@@ -2103,7 +2103,7 @@ function renderSummary(){
   else if(pct>=70){band="suggest"; bandName="Pass with Suggestions for Improvement";}
   const bySection = {};
   all.forEach(g=>{ (bySection[g.step] = bySection[g.step]||[]).push(g); });
-  const sectionNames = {assessment:"Assessment & Plan", preinduction:"Pre-Induction", airway:"Airway Management", meds:"Medication Management", maintenance:"Maintenance & Hemodynamics", emergence:"Emergence"};
+  const sectionNames = {assessment:"Assessment & Plan", preinduction:"Pre-Induction", meds:"Medication Management", airway:"Airway Management", maintenance:"Maintenance & Hemodynamics", emergence:"Emergence"};
   let rows = "";
   Object.keys(sectionNames).forEach(k=>{
     const items = bySection[k] || [];
@@ -2139,7 +2139,7 @@ function renderSummary(){
 }
 
 /* ============================= MAIN RENDER ============================= */
-const STEP_RENDERERS = [renderChart, renderAssessment, renderPreinduction, renderAirway, renderMeds, renderMaintenance, renderEmergence, renderSummary];
+const STEP_RENDERERS = [renderChart, renderAssessment, renderPreinduction, renderMeds, renderAirway, renderMaintenance, renderEmergence, renderSummary];
 
 function render(){
   const app = document.getElementById("neuro-app");
