@@ -134,7 +134,145 @@
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--success);color:#000;padding:11px 20px;border-radius:10px;font-weight:700;font-size:13px;z-index:999;transition:transform .3s;white-space:nowrap;max-width:90vw;text-align:center;}
   .toast.show{transform:translateX(-50%) translateY(0);}
   .toast.error{background:var(--danger);color:#fff;}
-</style>
+#nx-root{--bg:#0a0e1a;--panel:#1a2235;--panel-alt:#111827;--line:#2a3550;--teal:#00d4aa;--teal-dim:#0f5c52;--amber:#f59e0b;--green:#10b981;--red:#ef4444;--text:#e2e8f0;--text-dim:#94a3b8;--text-faint:#64748b;display:flex;flex-direction:column;flex:1;color:var(--text);line-height:1.5;}
+#nx-root h1,#nx-root h2,#nx-root h3{font-weight:600;}
+.tag-neuro{background:#12303a;color:#22d3ee;}
+#nx-root h1,#nx-root h2,#nx-root h3{font-family:var(--sans); font-weight:500; margin:0; letter-spacing:0.2px;}
+#nx-root .mono{font-family:var(--mono);}
+#nx-root .wrap{width:100%;flex:1;position:relative; z-index:1; max-width:760px; margin:0 auto; padding:28px 20px 80px;}
+#nx-root .monitor{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 18px;
+    display:flex; flex-wrap:wrap; gap:10px 28px;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+  }
+#nx-root .monitor::after{
+    content:"";
+    position:absolute; left:0; right:0; top:0; height:2px;
+    background:linear-gradient(90deg, transparent, var(--teal), transparent);
+    opacity:0.6;
+  }
+#nx-root .m-title{
+    font-family:var(--sans); font-size:19px; font-weight:500; color:var(--text);
+    flex:1 1 220px; min-width:200px;
+  }
+#nx-root .m-title .sub{display:block; font-family:var(--sans); font-size:12.5px; color:var(--text-dim); font-weight:400; margin-top:3px;}
+#nx-root .vital{ text-align:right; min-width:74px; }
+#nx-root .vital .label{font-size:10.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.06em;}
+#nx-root .vital .value{font-family:var(--mono); font-size:17px; color:var(--teal); font-weight:500;}
+#nx-root .vital.risk-high .value{color:var(--red);}
+#nx-root .vital.risk-low .value{color:var(--green);}
+#nx-root .rail{ display:flex; align-items:center; gap:0; margin:22px 0 26px; }
+#nx-root .rail .seg{flex:1; height:3px; background:var(--line); position:relative;}
+#nx-root .rail .seg.done{background:var(--teal);}
+#nx-root .rail .dot{
+    width:9px; height:9px; border-radius:50%; background:var(--line); border:2px solid var(--bg);
+    flex:none; margin:0 -1px; position:relative; z-index:1;
+  }
+#nx-root .rail .dot.done{background:var(--teal);}
+#nx-root .rail .dot.current{background:var(--amber); box-shadow:0 0 0 3px rgba(245,158,11,0.2);}
+#nx-root .step-label{font-size:12px; color:var(--text-faint); text-align:center; margin-top:-14px; margin-bottom:22px;}
+#nx-root .step-label b{color:var(--text-dim); font-weight:500;}
+#nx-root .panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:26px 24px 22px;
+    margin-bottom:16px;
+  }
+#nx-root .panel h2{font-size:21px; margin-bottom:4px;}
+#nx-root .panel .desc{color:var(--text-dim); font-size:13.5px; margin-bottom:18px; max-width:56ch;}
+#nx-root .section-tag{
+    display:inline-block; font-size:11px; color:var(--teal); border:1px solid var(--teal-dim);
+    background:rgba(0,212,170,0.06); border-radius:20px; padding:3px 10px; margin-bottom:10px; letter-spacing:0.02em;
+  }
+#nx-root .field-block{margin-bottom:18px;}
+#nx-root .field-block > .q{font-size:14.5px; margin-bottom:9px; color:var(--text);}
+#nx-root .field-block .hint{font-size:12px; color:var(--text-faint); margin-top:5px;}
+#nx-root .choices{display:flex; flex-direction:column; gap:7px;}
+#nx-root .choice{
+    display:flex; align-items:flex-start; gap:10px;
+    border:1px solid var(--line); background:var(--panel-alt);
+    border-radius:8px; padding:10px 12px; cursor:pointer; font-size:14px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+#nx-root .choice:hover{border-color:var(--teal-dim);}
+#nx-root .choice input{margin-top:3px; accent-color:var(--teal);}
+#nx-root .choice.picked{border-color:var(--teal); background:rgba(0,212,170,0.07);}
+#nx-root .choice.correct{border-color:var(--green); background:rgba(16,185,129,0.09);}
+#nx-root .choice.incorrect{border-color:var(--red); background:rgba(239,68,68,0.08);}
+#nx-root .checklist{display:flex; flex-direction:column; gap:6px;}
+#nx-root .checklist label{
+    display:flex; gap:10px; align-items:flex-start; font-size:14px; color:var(--text-dim);
+    border:1px solid var(--line); border-radius:8px; padding:9px 12px; cursor:pointer; background:var(--panel-alt);
+  }
+#nx-root .checklist input{margin-top:3px; accent-color:var(--teal);}
+#nx-root .checklist label.checked{color:var(--text); border-color:var(--teal-dim);}
+#nx-root .dose-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px;}
+#nx-root .dose-card{border:1px solid var(--line); background:var(--panel-alt); border-radius:9px; padding:13px 14px;}
+#nx-root .dose-card h4{font-size:14.5px; font-weight:600; margin-bottom:3px; color:var(--text);}
+#nx-root .dose-card .conc{font-size:11.5px; color:var(--text-faint); margin-bottom:10px;}
+#nx-root .dose-card .row{display:flex; gap:8px; margin-bottom:6px;}
+#nx-root .dose-card .row .fld{flex:1;}
+#nx-root .dose-card label.mini{font-size:10.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.04em; display:block; margin-bottom:3px;}
+#nx-root input[type=number],#nx-root input[type=text],#nx-root textarea,#nx-root select{
+    width:100%; background:#0a0e1a; border:1px solid var(--line); color:var(--text);
+    border-radius:6px; padding:8px 10px; font-family:var(--mono); font-size:13.5px;
+  }
+#nx-root select{font-family:var(--sans); font-size:13px;}
+#nx-root input:focus,#nx-root select:focus,#nx-root textarea:focus{outline:2px solid var(--teal); outline-offset:1px; border-color:var(--teal);}
+#nx-root textarea{font-family:var(--sans); resize:vertical; min-height:60px;}
+#nx-root .feedback{font-size:12px; margin-top:6px; display:none;}
+#nx-root .feedback.show{display:block;}
+#nx-root .feedback.ok{color:var(--green);}
+#nx-root .feedback.bad{color:var(--red);}
+#nx-root .order-row{display:flex; align-items:center; gap:10px; border:1px solid var(--line); background:var(--panel-alt); border-radius:8px; padding:8px 12px; margin-bottom:7px;}
+#nx-root .order-row .name{flex:1; font-size:13.5px;}
+#nx-root .order-row select{width:64px;}
+#nx-root .btn-row{display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;}
+#nx-root button{
+    font-family:var(--sans); font-size:13.5px; font-weight:500; cursor:pointer;
+    border-radius:7px; padding:10px 18px; border:1px solid transparent;
+  }
+#nx-root button:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+#nx-root .nx-btn-primary{background:var(--teal); color:#001a14; border-color:var(--teal);}
+#nx-root .nx-btn-primary:hover{background:#33e0bd;}
+#nx-root .btn-ghost{background:transparent; color:var(--text-dim); border-color:var(--line);}
+#nx-root .btn-ghost:hover{color:var(--text); border-color:var(--text-faint);}
+#nx-root .nx-btn-check{background:var(--panel-alt); color:var(--teal); border-color:var(--teal-dim);}
+#nx-root .nx-btn-check:hover{border-color:var(--teal);}
+#nx-root button:disabled{opacity:0.4; cursor:not-allowed;}
+#nx-root .callout{
+    border-left:3px solid var(--amber); background:rgba(245,158,11,0.06);
+    padding:10px 13px; border-radius:0 7px 7px 0; font-size:13px; color:var(--text-dim); margin:14px 0;
+  }
+#nx-root .callout b{color:var(--amber); font-weight:600;}
+#nx-root .callout.crit{border-left-color:var(--red); background:rgba(239,68,68,0.06);}
+#nx-root .callout.crit b{color:var(--red);}
+#nx-root .answer-key{font-size:12.5px; color:var(--text-dim); margin-top:8px; padding-top:8px; border-top:1px dashed var(--line);}
+#nx-root .answer-key b{color:var(--teal);}
+#nx-root .summary-grid{display:flex; flex-direction:column; gap:10px;}
+#nx-root .summary-row{display:flex; justify-content:space-between; align-items:center; font-size:14px; border-bottom:1px solid var(--line); padding-bottom:9px;}
+#nx-root .summary-row .n{color:var(--text-dim);}
+#nx-root .summary-row .s{font-family:var(--mono); font-weight:500;}
+#nx-root .band{
+    text-align:center; padding:22px 16px; border-radius:10px; margin-bottom:18px;
+    border:1px solid var(--line); background:var(--panel-alt);
+  }
+#nx-root .band .pct{font-family:var(--sans); font-size:44px; color:var(--teal);}
+#nx-root .band .name{font-size:14px; letter-spacing:0.02em; margin-top:2px;}
+#nx-root .band.pass{border-color:var(--teal-dim);}
+#nx-root .band.suggest .pct{color:var(--amber);}
+#nx-root .band.remediate .pct{color:var(--red);}
+#nx-root footer{text-align:center; font-size:11.5px; color:var(--text-faint); margin-top:26px;}
+@media (max-width:520px){#nx-root .dose-grid{grid-template-columns:1fr;}
+#nx-root .m-title{flex-basis:100%;}
+}@media (prefers-reduced-motion: reduce){#nx-root *{transition:none !important;}
+}</style>
 </head>
 <body>
 <div class="toast" id="toast"></div>
@@ -189,6 +327,15 @@
         <div class="mode-tag tag-preop">PreOp</div>
         <div class="mode-name">PreOp Assessment</div>
         <div class="mode-desc">ASA class · Mallampati · Thyromental distance · Airway risk</div>
+      </div>
+      <div class="mode-arrow">›</div>
+    </div>
+    <div class="mode-card" onclick="startNeuro()">
+      <div class="mode-icon">🧠</div>
+      <div class="mode-info">
+        <div class="mode-tag tag-neuro">Neuro</div>
+        <div class="mode-name">Neuro Induction</div>
+        <div class="mode-desc">Craniotomy · TBI · Aneurysm · SDH · ACDF · ICP &amp; hemodynamic goals</div>
       </div>
       <div class="mode-arrow">›</div>
     </div>
@@ -272,6 +419,15 @@ Example: 180 lbs ÷ 2 = 90 → 90 − 9 = <strong style="color:var(--text)">81 k
       <button class="btn-secondary" onclick="showSelect()">← Choose Mode</button>
     </div>
   </div>
+</div>
+
+<!-- NEURO -->
+<div class="screen" id="screen-neuro">
+  <div class="hdr">
+    <div class="hdr-title">Neuro Induction</div>
+    <button class="exit-btn" onclick="showSelect()">← Exit</button>
+  </div>
+  <div id="nx-root"><div class="wrap" id="neuro-app"></div></div>
 </div>
 
 <script>
@@ -651,8 +807,14 @@ function showResults(){
     <div class="res-row"><span class="res-lbl">Verdict</span><span class="res-val" style="color:${pass?'var(--success)':'var(--danger)'}">${pass?'✓ PASS':'✗ Remediate'}</span></div>
   `;
 }
+function startNeuro(){
+  ['screen-select','screen-sim','screen-results'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('screen-neuro').classList.add('active');
+  NX.newScenario();
+}
 function retryMode(){startMode(mode);}
 function showSelect(){
+  document.getElementById('screen-neuro').classList.remove('active');
   document.getElementById('screen-sim').classList.remove('active');
   document.getElementById('screen-results').classList.remove('active');
   document.getElementById('screen-select').classList.add('active');
@@ -662,6 +824,1342 @@ function showToast(msg,type='success'){
   t.textContent=msg;t.className=`toast ${type} show`;
   setTimeout(()=>t.classList.remove('show'),3000);
 }
+</script>
+<script>
+(function(){
+
+/* ============================= HELPERS ============================= */
+function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function round1(n){return Math.round(n*10)/10;}
+function val(id){ return document.getElementById(id).value; }
+function numVal(id){ return parseFloat(document.getElementById(id).value); }
+function feedbackEl(id, ok, text){ const fb=document.getElementById(id); if(!fb) return; fb.className="feedback show "+(ok?"ok":"bad"); fb.textContent=text; }
+function answerKeyHtml(pairs){ return `<div class="answer-key">${pairs.map(p=>`<div><b>${p[0]}:</b> ${p[1]}</div>`).join("")}</div>`; }
+function within(v, low, high, tolPct){
+  if(isNaN(v)) return false;
+  const tol = Math.max(0.3, Math.max(Math.abs(low),Math.abs(high))*tolPct);
+  return v >= low - tol && v <= high + tol;
+}
+function withinTarget(v, target, tolPct){
+  if(isNaN(v)) return false;
+  const tol = Math.max(0.3, Math.abs(target)*tolPct);
+  return v >= target - tol && v <= target + tol;
+}
+function doseCardHTML(title, concLine, doseLabel, doseId, mlId, fbId){
+  return `<div class="dose-card">
+    <h4>${title}</h4>
+    <div class="conc">${concLine}</div>
+    <div class="row">
+      <div class="fld"><label class="mini">${doseLabel}</label><input type="number" step="0.1" id="${doseId}"></div>
+      <div class="fld"><label class="mini">Volume (mL)</label><input type="number" step="0.1" id="${mlId}"></div>
+    </div>
+    <div class="feedback" id="${fbId}"></div>
+  </div>`;
+}
+function doseCardSingleHTML(title, concLine, label, id, fbId){
+  return `<div class="dose-card">
+    <h4>${title}</h4>
+    <div class="conc">${concLine}</div>
+    <div class="row"><div class="fld"><label class="mini">${label}</label><input type="number" step="0.1" id="${id}"></div></div>
+    <div class="feedback" id="${fbId}"></div>
+  </div>`;
+}
+function gradeRange(stepKey, doseId, mlId, fbId, label, lowDose, highDose, lowMl, highMl, tolPct){
+  const dv = numVal(doseId), mv = numVal(mlId);
+  const ok = within(dv, lowDose, highDose, tolPct) && within(mv, lowMl, highMl, tolPct);
+  feedbackEl(fbId, ok, ok ? "✓ within range" : `expected ${round1(lowDose)}–${round1(highDose)} (${round1(lowMl)}–${round1(highMl)} mL)`);
+  recordGrade(stepKey, label, ok);
+  return ok;
+}
+function gradeTarget(stepKey, doseId, mlId, fbId, label, targetDose, targetMl, tolPct){
+  const dv = numVal(doseId), mv = numVal(mlId);
+  const ok = withinTarget(dv, targetDose, tolPct) && withinTarget(mv, targetMl, tolPct);
+  feedbackEl(fbId, ok, ok ? "✓ correct" : `expected ~${round1(targetDose)} (${round1(targetMl)} mL)`);
+  recordGrade(stepKey, label, ok);
+  return ok;
+}
+function gradeSingleField(stepKey, id, fbId, label, low, high, tolPct){
+  const v = numVal(id);
+  const ok = within(v, low, high, tolPct);
+  feedbackEl(fbId, ok, ok ? "✓ within range" : `expected ${round1(low)}–${round1(high)}`);
+  recordGrade(stepKey, label, ok);
+  return ok;
+}
+function vitalsCorrectSet(sc){
+  if(sc.vitalCategory==="none") return new Set([0]);
+  if(sc.vitalCategory==="high") return sc.vitalsHR>60 ? new Set([1,4]) : new Set([4]);
+  return sc.vitalsHR>70 ? new Set([2,3]) : new Set([3]);
+}
+function vitalsCheckHTML(sc){
+  return `
+  <div class="field-block" style="margin-top:16px;">
+    <div class="q">Current ${sc.vitalType}: <span class="mono" style="color:var(--teal);font-size:16px;">${sc.currentVital} ${sc.vitalUnit}</span> &nbsp;(target ${sc.vitalLow}–${sc.vitalHigh} ${sc.vitalUnit}) &nbsp;·&nbsp; HR: <span class="mono" style="color:var(--teal);font-size:16px;">${sc.vitalsHR} bpm</span></div>
+    <div class="choices" id="vitalsChoices">${choiceGroup("vitals",["No treatment needed — within range","Treat with Esmolol","Treat with Phenylephrine","Treat with Ephedrine","Treat with Nicardipine"])}</div>
+    <div class="hint">High BP: Esmolol or Nicardipine are both fine if HR &gt; 60 bpm; use Nicardipine alone if HR ≤ 60 bpm. Low BP: Ephedrine or Phenylephrine are both fine if HR &gt; 70 bpm; use Ephedrine alone if HR ≤ 70 bpm.</div>
+  </div>`;
+}
+function checkVitals(sc){
+  const vVal = document.querySelector('input[name="vitals"]:checked');
+  const pickedIdx = vVal? +vVal.value : -1;
+  const correctSet = vitalsCorrectSet(sc);
+  const container = document.getElementById("vitalsChoices");
+  [...container.children].forEach((c,i)=>{
+    c.classList.remove("picked","correct","incorrect");
+    if(i===pickedIdx) c.classList.add("picked");
+    if(correctSet.has(i)) c.classList.add("correct");
+    else if(i===pickedIdx) c.classList.add("incorrect");
+  });
+  recordGrade("maintenance","Vitals recognized and treated appropriately", correctSet.has(pickedIdx));
+}
+function vitalsAnswerRow(sc){
+  let text;
+  if(sc.vitalCategory==="none"){
+    text = `${sc.currentVital} ${sc.vitalUnit} — within target (${sc.vitalLow}–${sc.vitalHigh}), no treatment needed`;
+  } else if(sc.vitalCategory==="high"){
+    text = sc.vitalsHR>60
+      ? `${sc.currentVital} ${sc.vitalUnit} — above target, HR ${sc.vitalsHR} bpm (&gt;60) — Esmolol or Nicardipine`
+      : `${sc.currentVital} ${sc.vitalUnit} — above target, HR ${sc.vitalsHR} bpm (≤60) — treat with Nicardipine`;
+  } else {
+    text = sc.vitalsHR>70
+      ? `${sc.currentVital} ${sc.vitalUnit} — below target, HR ${sc.vitalsHR} bpm (&gt;70) — Ephedrine or Phenylephrine`
+      : `${sc.currentVital} ${sc.vitalUnit} — below target, HR ${sc.vitalsHR} bpm (≤70) — treat with Ephedrine`;
+  }
+  return ["Vitals", text];
+}
+
+/* ============================= CASES ============================= */
+const CASES = [
+  { key:"awake-crani", title:"Awake Craniotomy", build(w,age,sex){
+      const location = pick(["left frontal (Broca's area adjacent)","left temporal (Wernicke's area adjacent)","right frontal motor strip","left parietal, near primary motor cortex"]);
+      const indication = pick(["awake language mapping given eloquent cortex involvement","awake motor mapping to preserve function","intraoperative cortical stimulation mapping"]);
+      const edematous = Math.random()<0.4;
+      const npoH = randInt(6,10);
+      return {
+        summary:`${age}-year-old ${sex} for resection of a ${location} tumor, planned as an awake craniotomy for ${indication}. Neurologically intact, cooperative, and an appropriate candidate for the awake technique.`,
+        npoText:`NPO ${npoH} h, fasting confirmed`, npoHigh:false, gcs:15, hasShift:false,
+        aspiration:"Low", induction:"LMA", cspine:false, scope:"DL", edematous
+      };
+  }},
+  { key:"tbi-mri", title:"TBI — Imaging Under GA", build(w,age,sex){
+      const mech = pick(["a high-speed MVC","a fall from height","an unhelmeted motorcycle collision","an assault with head strike"]);
+      const gcs = randInt(6,12);
+      const hypotensive = Math.random()<0.35;
+      const icpElevated = Math.random()<0.5;
+      const sign = pick(["a sluggish left pupil","brief posturing noted by EMS","one episode of vomiting en route"]);
+      const agent = hypotensive ? (icpElevated ? "etomidate" : "ketamine") : "propofol";
+      const ketConc = pick([10,50,100]);
+      return {
+        summary:`${age}-year-old ${sex}, TBI following ${mech}. GCS ${gcs}. ${sign}. ${hypotensive? "Currently hypotensive.":"Hemodynamically normal to hypertensive."} ${icpElevated? "Signs concerning for elevated ICP.":"No overt signs of elevated ICP at this time."} Ordered for urgent head imaging under GA.`,
+        npoText:"NPO status unknown — trauma activation", npoHigh:true, gcs, hasShift:icpElevated,
+        aspiration:"High", induction:"RSI ETT", cspine:true, scope:"Glidescope",
+        hypotensive, icpElevated, agent, ketConc
+      };
+  }},
+  { key:"aneurysm-unruptured", title:"Unruptured Cerebral Aneurysm — Elective Clipping", build(w,age,sex){
+      const site = pick(["anterior communicating","posterior communicating","middle cerebral","basilar tip"]);
+      const found = pick(["found incidentally on imaging for chronic headaches","found during work-up for an unrelated complaint","identified on screening imaging given strong family history"]);
+      const htn = pick(["a history of poorly controlled hypertension","well-controlled hypertension on lisinopril","no significant cardiac history"]);
+      const npoH = randInt(6,10);
+      const heartRate = randInt(45,100);
+      return {
+        summary:`${age}-year-old ${sex} for elective clipping of a ${site} artery aneurysm, ${found}. Neurologically intact, GCS 15. Past medical history notable for ${htn}. Baseline heart rate ${heartRate} bpm.`,
+        npoText:`NPO ${npoH} h, fasting confirmed`, npoHigh:false, gcs:15, hasShift:false,
+        aspiration:"Low", induction:"Regular Induction ETT", cspine:false, scope:"DL", heartRate
+      };
+  }},
+  { key:"aneurysm-ruptured", title:"Ruptured Aneurysm with Subarachnoid Hemorrhage — Emergent", build(w,age,sex){
+      const onset = pick(["a sudden \u201cworst headache of my life\u201d while exercising","a witnessed collapse followed by a severe headache","a sentinel headache three days ago, now with acute decline"]);
+      const hh = pick([2,3,3,4]);
+      const emesis = pick(["vomited twice prior to arrival","one episode of emesis in triage","reports nausea, no vomiting yet"]);
+      const heartRate = randInt(45,100);
+      const edematous = Math.random()<0.4;
+      return {
+        summary:`${age}-year-old ${sex} with ${onset}. Hunt-Hess grade ${hh}, ${emesis}. Taken emergently for aneurysm treatment before rebleed. Baseline heart rate ${heartRate} bpm.`,
+        npoText:"NPO status not established — emergent presentation", npoHigh:true, gcs: hh<=2?14:randInt(7,12), hasShift:false,
+        aspiration:"High", induction:"RSI ETT", cspine:false, scope:"DL", heartRate, edematous, huntHess:hh
+      };
+  }},
+  { key:"sdh-evacuation", title:"Subdural Hematoma Evacuation", build(w,age,sex){
+      const mech = pick(["a fall","an assault","an MVC","an anticoagulant-associated spontaneous bleed"]);
+      const emergent = Math.random()<0.6;
+      const gcs = emergent? randInt(6,12): randInt(12,15);
+      return {
+        summary:`${age}-year-old ${sex} with a ${emergent? "large, rapidly expanding":"chronic, symptomatic"} subdural hematoma following ${mech}. GCS ${gcs}. ${emergent? "Taken emergently to the OR for evacuation before further herniation.":"Scheduled for evacuation on a more controlled, semi-urgent basis."}`,
+        npoText: emergent? "NPO status not established — emergent presentation" : `NPO ${randInt(6,8)} h`,
+        npoHigh: emergent, gcs, hasShift:true,
+        aspiration: emergent? "High":"Low", induction: emergent? "RSI ETT":"Regular Induction ETT", cspine:true, scope:"Glidescope", emergent
+      };
+  }},
+  { key:"acdf-seps-meps", title:"ACDF with SEP/MEP Monitoring", build(w,age,sex){
+      const level = pick(["C5-6","C6-7","C4-5","C5-7 multilevel"]);
+      const symptom = pick(["progressive myelopathy with hand clumsiness","radiculopathy with arm weakness","cervical stenosis with gait disturbance"]);
+      const aspirationHighRisk = Math.random()<0.25;
+      const npoH = randInt(7,11);
+      const propofolTarget = randInt(75,150);
+      const remiTarget = round1(0.1 + Math.random()*0.9);
+      return {
+        summary:`${age}-year-old ${sex} for anterior cervical discectomy and fusion at ${level} for ${symptom}. Intraoperative SEP/MEP monitoring planned. ${aspirationHighRisk? "History of severe reflux — higher aspiration risk noted on assessment.":"No significant aspiration risk factors."}`,
+        npoText:`NPO ${npoH} h${aspirationHighRisk? ", though reflux history raises aspiration concern":""}`,
+        npoHigh:aspirationHighRisk, gcs:15, hasShift:false,
+        aspiration: aspirationHighRisk?"High":"Low", induction: aspirationHighRisk?"RSI ETT":"Regular Induction ETT", cspine:true, scope:"Glidescope",
+        aspirationHighRisk, level, propofolTarget, remiTarget
+      };
+  }}
+];
+
+function computeVitals(key){
+  let type, low, high, unit="mmHg", baseline=null;
+  if(key==="tbi-mri" || key==="sdh-evacuation"){ type="MAP"; low=80; high=110; }
+  else if(key==="aneurysm-unruptured"){ type="SBP"; low=120; high=150; }
+  else if(key==="aneurysm-ruptured"){ type="SBP"; low=100; high=160; }
+  else if(key==="acdf-seps-meps"){ baseline=randInt(110,140); type="SBP"; low=Math.round(baseline*0.9); high=Math.round(baseline*1.1); }
+  else { type="SBP"; low=90; high=140; } // awake-crani and default
+
+  const r = Math.random();
+  let current;
+  if(r<0.4){ current = randInt(low, high); }
+  else if(r<0.7){ current = randInt(Math.max(40, low-30), low-1); }
+  else { current = randInt(high+1, high+30); }
+
+  const vitalsHR = randInt(45,110);
+
+  let category;
+  if(current < low){ category = "low"; }
+  else if(current > high){ category = "high"; }
+  else { category = "none"; }
+
+  return { vitalType:type, vitalUnit:unit, vitalLow:low, vitalHigh:high, currentVital:current, vitalsHR, vitalCategory:category, vitalBaseline:baseline };
+}
+function generateScenario(){
+  const c = pick(CASES);
+  const weight = randInt(52,116);
+  const age = randInt(19,78);
+  const sex = pick(["female","male"]);
+  const d = c.build(weight, age, sex);
+  const vitals = computeVitals(c.key);
+  return Object.assign({}, {key:c.key, title:c.title}, d, vitals, {weight, age, sex, id: Date.now()+"-"+Math.random()});
+}
+
+/* ============================= STATE ============================= */
+const STEP_KEYS = ["chart","assessment","preinduction","airway","meds","maintenance","emergence","summary"];
+const STEP_LABELS = ["Patient Chart","Assessment & Plan","Pre-Induction","Airway & Induction","Medications","Maintenance & Hemodynamics","Emergence","Summary"];
+
+let state = { scenario:null, stepIndex:0, graded:{}, assessmentAnswered:false };
+
+function resetGradedForStep(key){ state.graded[key] = []; }
+function recordGrade(key, label, correct){
+  if(!state.graded[key]) state.graded[key]=[];
+  const existing = state.graded[key].find(g=>g.label===label);
+  if(existing) existing.correct = correct;
+  else state.graded[key].push({label, correct});
+}
+function allGraded(){
+  let out=[];
+  STEP_KEYS.forEach(k=>{ if(state.graded[k]) out = out.concat(state.graded[k].map(g=>Object.assign({step:k},g))); });
+  return out;
+}
+
+function newScenario(){
+  state.scenario = generateScenario();
+  state.stepIndex = 0;
+  state.graded = {};
+  state.assessmentAnswered = false;
+  render();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function goStep(i){
+  state.stepIndex = Math.max(0, Math.min(STEP_KEYS.length-1, i));
+  render();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function nextStep(){ goStep(state.stepIndex+1); }
+function prevStep(){ goStep(state.stepIndex-1); }
+
+/* ============================= RENDER HELPERS ============================= */
+function railHtml(){
+  let segs = "";
+  for(let i=0;i<STEP_KEYS.length;i++){
+    const dotClass = i<state.stepIndex? "dot done" : (i===state.stepIndex? "dot current":"dot");
+    segs += `<div class="${dotClass}"></div>`;
+    if(i<STEP_KEYS.length-1){
+      segs += `<div class="seg ${i<state.stepIndex? "done":""}"></div>`;
+    }
+  }
+  return `<div class="rail">${segs}</div><div class="step-label">Step ${state.stepIndex+1} of ${STEP_KEYS.length} — <b>${STEP_LABELS[state.stepIndex]}</b></div>`;
+}
+function monitorHtml(){
+  const sc = state.scenario;
+  const revealed = state.assessmentAnswered;
+  const riskClass = revealed ? (sc.aspiration==="High"?"risk-high":"risk-low") : "";
+  const riskValue = revealed ? sc.aspiration : "—";
+  return `
+  <div class="monitor">
+    <div class="m-title">${sc.title}<span class="sub">${sc.age} y/o ${sc.sex} &middot; ${sc.npoText}</span></div>
+    <div class="vital"><div class="label">Weight</div><div class="value">${sc.weight} kg</div></div>
+    <div class="vital ${riskClass}"><div class="label">Aspiration</div><div class="value">${riskValue}</div></div>
+    <div class="vital"><div class="label">GCS</div><div class="value">${sc.gcs}</div></div>
+  </div>`;
+}
+function choiceGroup(name, options){
+  return options.map((opt,i)=>`
+    <label class="choice" data-idx="${i}">
+      <input type="radio" name="${name}" value="${i}">
+      <span>${opt}</span>
+    </label>`).join("");
+}
+function markChoice(containerId, pickedIdx, correctIdx){
+  const container = document.getElementById(containerId);
+  [...container.children].forEach((c,i)=>{
+    c.classList.remove("picked","correct","incorrect");
+    if(i===pickedIdx) c.classList.add("picked");
+    if(i===correctIdx) c.classList.add("correct");
+    else if(i===pickedIdx) c.classList.add("incorrect");
+  });
+}
+function toggleCheck(input){
+  const label = input.closest("label");
+  label.classList.toggle("checked", input.checked);
+}
+
+/* ============================= STEP: CHART ============================= */
+function renderChart(){
+  const sc = state.scenario;
+  let cspineNote = "";
+  if(sc.cspine){
+    cspineNote = sc.key==="acdf-seps-meps"
+      ? `<div class="callout crit"><b>Cervical spine:</b> known pathology at this level — avoid excessive neck extension; maintain neutral alignment during airway management.</div>`
+      : `<div class="callout crit"><b>Cervical spine:</b> not cleared — manual in-line stabilization required during airway management.</div>`;
+  }
+  return `
+  <div class="panel">
+    <span class="section-tag">Case brief</span>
+    <h2>${sc.title}</h2>
+    <p class="desc">${sc.summary}</p>
+    <div class="callout"><b>NPO status:</b> ${sc.npoText}</div>
+    ${sc.hasShift ? `<div class="callout crit"><b>Imaging:</b> mass effect / elevated ICP is a live concern.</div>`:""}
+    ${cspineNote}
+    <p class="desc" style="margin-top:14px;">Work this patient through assessment, pre-induction safety, airway management, induction drug dosing, maintenance, hemodynamic goals, and emergence. Every field below is calculated fresh for this patient's ${sc.weight} kg.</p>
+    <div class="btn-row">
+      <button class="nx-btn-primary" onclick="NX.nextStep()">Begin assessment →</button>
+    </div>
+  </div>`;
+}
+
+/* ============================= STEP: ASSESSMENT ============================= */
+function renderAssessment(){
+  const sc = state.scenario;
+  resetGradedForStep("assessment");
+  const riskOptions = ["Low — standard fasting achieved, no aspiration precautions needed","High — full stomach / unknown NPO status, aspiration precautions required"];
+  const methodOptions = ["Regular Induction ETT","RSI ETT","LMA"];
+  return `
+  <div class="panel">
+    <span class="section-tag">Patient assessment & individualized plan</span>
+    <h2>What's your plan?</h2>
+    <p class="desc">Review history, NPO status, and presentation, then commit to a plan before moving on.</p>
+    <div class="field-block">
+      <div class="q">1. What is this patient's aspiration risk?</div>
+      <div class="choices" id="riskChoices">${choiceGroup("risk", riskOptions)}</div>
+    </div>
+    <div class="field-block">
+      <div class="q">2. Choose the appropriate induction method for this case.</div>
+      <div class="choices" id="methodChoices">${choiceGroup("method", methodOptions)}</div>
+    </div>
+    <div class="field-block">
+      <div class="q">3. Note current mental status and any deficits (not scored — for your own plan).</div>
+      <textarea id="mentalStatus" placeholder="e.g., GCS ${sc.gcs}, oriented x3, no focal deficit..."></textarea>
+    </div>
+    <div class="callout"><b>Remember:</b> plan for rapid awakening at the end of every neuro case to allow a timely neuro exam (where applicable to this case).</div>
+    <div class="btn-row">
+      <button class="nx-btn-check" onclick="NX.checkAssessment()">Check answers</button>
+    </div>
+    <div id="assessmentAnswerKey"></div>
+  </div>`;
+}
+function checkAssessment(){
+  const sc = state.scenario;
+  const riskVal = document.querySelector('input[name="risk"]:checked');
+  const methodVal = document.querySelector('input[name="method"]:checked');
+  const riskCorrectIdx = sc.aspiration==="High" ? 1 : 0;
+  const methodOptions = ["Regular Induction ETT","RSI ETT","LMA"];
+  const methodCorrectIdx = methodOptions.indexOf(sc.induction);
+  markChoice("riskChoices", riskVal? +riskVal.value : -1, riskCorrectIdx);
+  markChoice("methodChoices", methodVal? +methodVal.value : -1, methodCorrectIdx);
+  recordGrade("assessment","Aspiration risk identified", riskVal && +riskVal.value===riskCorrectIdx);
+  recordGrade("assessment","Appropriate induction method chosen", methodVal && +methodVal.value===methodCorrectIdx);
+  document.getElementById("assessmentAnswerKey").innerHTML = answerKeyHtml([
+    ["Aspiration risk", sc.aspiration + (sc.cspine && sc.aspiration==="High" ? " — trauma/emergent presentation" : "")],
+    ["Induction method", sc.induction]
+  ]);
+  if(riskVal){
+    state.assessmentAnswered = true;
+    const monitorEl = document.querySelector(".monitor");
+    if(monitorEl) monitorEl.outerHTML = monitorHtml();
+  }
+}
+
+/* ============================= STEP: PREINDUCTION ============================= */
+function renderPreinduction(){
+  const sc = state.scenario;
+  const followsCommands = sc.gcs >= 15;
+  const items = [
+    "Machine check completed, backup airway equipment present",
+    "Standard monitors applied and confirmed working: SpO2, NIBP, EKG",
+    "Suction within reach on induction",
+    "Baseline vital signs obtained",
+    "Preoxygenation performed: O2 &gt;6 L/min, tight mask seal, APL open (zero) — increase flows before placing the mask"
+  ];
+  if(sc.hasShift){
+    items.unshift("HOB positioned to 15–30 degrees prior to induction — mass lesion present");
+  }
+  resetGradedForStep("preinduction");
+  const preoxOptions = ["3 vital capacity breaths (FVC)","3 minutes of tidal breathing, or EtO2 &gt;85%","1 minute of tidal breathing","Both 3 FVC breaths AND 3 minutes of tidal breathing"];
+  return `
+  <div class="panel">
+    <span class="section-tag">Pre-induction preparation & safety</span>
+    <h2>Room, monitors, and preoxygenation</h2>
+    <div class="checklist" id="preChecklist">
+      ${items.map((t,i)=>`<label data-i="${i}"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>${t}</span></label>`).join("")}
+    </div>
+    <div class="field-block" style="margin-top:16px;">
+      <div class="q">This patient ${followsCommands ? "follows commands" : "does not reliably follow commands"}. Which preoxygenation approach is appropriate?</div>
+      <div class="choices" id="preoxChoices">${choiceGroup("preox", preoxOptions)}</div>
+      ${followsCommands ? `<div class="hint">A cooperative patient can do rapid FVC breaths on command — 3 FVC alone, 3 minutes alone, or both are all acceptable.</div>` : `<div class="hint">FVC breaths require the patient to follow commands — since this patient can't reliably do that, use 3 minutes of tidal breathing (or EtO2 &gt;85%) instead.</div>`}
+    </div>
+    <div class="btn-row">
+      <button class="nx-btn-check" onclick="NX.checkPreinduction()">Check answer</button>
+    </div>
+    <div id="preAnswerKey"></div>
+  </div>`;
+}
+function checkPreinduction(){
+  const sc = state.scenario;
+  const followsCommands = sc.gcs >= 15;
+  const boxes = [...document.querySelectorAll('#preChecklist input[type=checkbox]')];
+  recordGrade("preinduction","Pre-induction safety checklist complete", boxes.every(b=>b.checked));
+  const preoxVal = document.querySelector('input[name="preox"]:checked');
+  const pickedIdx = preoxVal? +preoxVal.value : -1;
+  const correctSet = followsCommands ? new Set([0,1,3]) : new Set([1]);
+  const container = document.getElementById("preoxChoices");
+  [...container.children].forEach((c,i)=>{
+    c.classList.remove("picked","correct","incorrect");
+    if(i===pickedIdx) c.classList.add("picked");
+    if(correctSet.has(i)) c.classList.add("correct");
+    else if(i===pickedIdx) c.classList.add("incorrect");
+  });
+  recordGrade("preinduction","Correct preoxygenation endpoint", correctSet.has(pickedIdx));
+  document.getElementById("preAnswerKey").innerHTML = answerKeyHtml([
+    ["Preoxygenation", followsCommands
+      ? "This patient follows commands — 3 FVC breaths, 3 minutes of tidal breathing, or both are all acceptable."
+      : "This patient doesn't reliably follow commands — FVC breaths aren't feasible, so use 3 minutes of tidal breathing (or EtO2 >85%)."]
+  ]);
+}
+
+/* ============================= STEP: AIRWAY ============================= */
+function renderAirway(){
+  const sc = state.scenario;
+  resetGradedForStep("airway");
+  const scopeLabel = sc.scope === "Glidescope" ? "Glidescope video laryngoscopy" : "Direct laryngoscopy";
+  let items = [];
+  if(sc.induction === "RSI ETT"){
+    items = [
+      "Cricoid pressure applied PRIOR to induction medications",
+      "No mask ventilation attempted before intubation (unless desaturating)",
+      `${scopeLabel} performed, grade view verbalized, ETT inserted`,
+      "Correct depth verified, cuff inflated",
+      "Placement confirmed: +EtCO2 waveform, equal bilateral breath sounds, fog in ETT",
+      "Cricoid pressure released AFTER cuff inflation is confirmed"
+    ];
+  } else if(sc.induction === "LMA"){
+    items = [
+      "Loss of lid reflex confirmed before airway manipulation",
+      "Adequate depth confirmed before LMA insertion",
+      "Atraumatic LMA insertion technique",
+      "Effective seal confirmed: +EtCO2 waveform, no audible leak at appropriate cuff pressure",
+      "Bilateral breath sounds confirmed",
+      "No neuromuscular blocking agent administered — spontaneous ventilation preserved"
+    ];
+  } else {
+    items = [
+      "Loss of lid reflex confirmed, eyes taped, following propofol",
+      "Ability to mask ventilate confirmed via +EtCO2 waveform",
+      "Effective positive pressure ventilation: tight seal, chest rise, fog in mask (oral airway inserted if difficulty)",
+      "Paralytic (rocuronium) given, once positive pressure ventilation is confirmed effective",
+      `${scopeLabel} performed, grade view verbalized, ETT inserted`,
+      "Correct depth verified, cuff inflated",
+      "Placement confirmed: +EtCO2 waveform, equal bilateral breath sounds, fog in ETT"
+    ];
+  }
+  if(sc.cspine){
+    items.unshift("Manual in-line cervical spine stabilization maintained throughout airway management");
+  }
+  return `
+  <div class="panel">
+    <span class="section-tag">Airway management — ${sc.induction}</span>
+    <h2>Secure the airway</h2>
+    <p class="desc">${sc.induction==="RSI ETT" ? "High aspiration risk — the mask-ventilation step is skipped." : "Standard sequence for this induction method."}</p>
+    <div class="checklist" id="airwayChecklist">
+      ${items.map((t,i)=>`<label data-i="${i}"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>${t}</span></label>`).join("")}
+    </div>
+    <div class="btn-row">
+      <button class="nx-btn-check" onclick="NX.checkAirway()">Confirm sequence</button>
+    </div>
+    <div id="airwayAnswerKey"></div>
+  </div>`;
+}
+function checkAirway(){
+  const boxes = [...document.querySelectorAll('#airwayChecklist input[type=checkbox]')];
+  recordGrade("airway","Airway sequence completed in full", boxes.every(b=>b.checked));
+  document.getElementById("airwayAnswerKey").innerHTML = answerKeyHtml([["Airway","Every item above is expected for a Pass on airway management for this induction type."]]);
+}
+
+/* ============================= STEP: MEDS ============================= */
+function medsAwakeCrani(sc){
+  return `
+  <div class="panel">
+    <span class="section-tag">Medication management</span>
+    <h2>Induction doses for ${sc.weight} kg</h2>
+    <p class="desc">LMA technique with no paralytic — spontaneous ventilation is preserved for awake mapping.</p>
+    <div class="dose-grid">
+      ${doseCardHTML("Fentanyl","50 mcg/mL · 1–2 mcg/kg","Dose (mcg)","doseFentMcg","doseFentMl","fbFent")}
+      ${doseCardHTML("Lidocaine","20 mg/mL · 1 mg/kg","Dose (mg)","doseLidoMg","doseLidoMl","fbLido")}
+      ${doseCardHTML("Propofol","10 mg/mL · 1–2 mg/kg","Dose (mg)","dosePropMg","dosePropMl","fbProp")}
+    </div>
+    <div class="callout">No rocuronium or other paralytic — this technique relies on spontaneous ventilation throughout.</div>
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMeds()">Check my doses</button></div>
+    <div id="medsAnswerKey"></div>
+  </div>`;
+}
+function checkMedsAwakeCrani(sc){
+  const w=sc.weight;
+  gradeRange("meds","doseFentMcg","doseFentMl","fbFent","Fentanyl dose & volume", w*1, w*2, w*1/50, w*2/50, 0.05);
+  gradeTarget("meds","doseLidoMg","doseLidoMl","fbLido","Lidocaine dose & volume", w*1, w*1/20, 0.1);
+  gradeRange("meds","dosePropMg","dosePropMl","fbProp","Propofol dose & volume", w*1, w*2, w*1/10, w*2/10, 0.05);
+  document.getElementById("medsAnswerKey").innerHTML = answerKeyHtml([
+    ["Fentanyl", `${w*1}–${w*2} mcg (${round1(w*1/50)}–${round1(w*2/50)} mL)`],
+    ["Lidocaine", `${round1(w*1)} mg (${round1(w*1/20)} mL)`],
+    ["Propofol", `${w*1}–${w*2} mg (${round1(w*1/10)}–${round1(w*2/10)} mL)`]
+  ]);
+}
+
+function medsTBIMRI(sc){
+  const agentLabel = {etomidate:"Etomidate", ketamine:"Ketamine", propofol:"Propofol"}[sc.agent];
+  const agentCard = sc.agent==="etomidate"
+    ? doseCardHTML("Etomidate","2 mg/mL · 0.2–0.4 mg/kg","Dose (mg)","doseAgentMg","doseAgentMl","fbAgent")
+    : sc.agent==="ketamine"
+      ? doseCardHTML("Ketamine", sc.ketConc+" mg/mL · 1–2 mg/kg","Dose (mg)","doseAgentMg","doseAgentMl","fbAgent")
+      : doseCardHTML("Propofol","10 mg/mL · 1–2 mg/kg","Dose (mg)","doseAgentMg","doseAgentMl","fbAgent");
+  return `
+  <div class="panel">
+    <span class="section-tag">Medication management</span>
+    <h2>Induction doses for ${sc.weight} kg</h2>
+    <p class="desc">This patient is ${sc.hypotensive?"hypotensive":"normotensive to hypertensive"}, with ${sc.icpElevated?"signs concerning for elevated ICP":"no clear signs of elevated ICP"}.</p>
+    <div class="field-block">
+      <div class="q">Which induction agent is most appropriate here?</div>
+      <div class="choices" id="agentChoices">${choiceGroup("agent",["Etomidate","Ketamine","Propofol"])}</div>
+      <div class="hint">Avoid ketamine if ICP is elevated. Propofol is preferred if normotensive or hypertensive. Once you've picked, calculate only the agent you're using below.</div>
+    </div>
+    <div class="dose-grid">
+      ${doseCardHTML("Fentanyl","50 mcg/mL · 1–2 mcg/kg","Dose (mcg)","doseFentMcg","doseFentMl","fbFent")}
+      ${doseCardHTML("Lidocaine","20 mg/mL · 1 mg/kg","Dose (mg)","doseLidoMg","doseLidoMl","fbLido")}
+      ${agentCard}
+      ${doseCardHTML("Rocuronium (RSI)","10 mg/mL · 1.2 mg/kg","Dose (mg)","doseRocMg","doseRocMl","fbRoc")}
+    </div>
+    <div class="callout crit"><b>No hyperventilation</b> — and avoid corticosteroids or dextrose/lactate-containing fluids in this patient.</div>
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMeds()">Check my answers</button></div>
+    <div id="medsAnswerKey"></div>
+  </div>`;
+}
+function checkMedsTBIMRI(sc){
+  const w=sc.weight;
+  const agentVal = document.querySelector('input[name="agent"]:checked');
+  const correctIdx = {etomidate:0,ketamine:1,propofol:2}[sc.agent];
+  markChoice("agentChoices", agentVal? +agentVal.value:-1, correctIdx);
+  recordGrade("meds","Correct induction agent chosen", agentVal && +agentVal.value===correctIdx);
+
+  gradeRange("meds","doseFentMcg","doseFentMl","fbFent","Fentanyl dose & volume", w*1, w*2, w*1/50, w*2/50, 0.05);
+  gradeTarget("meds","doseLidoMg","doseLidoMl","fbLido","Lidocaine dose & volume", w*1, w*1/20, 0.1);
+
+  let agentLow, agentHigh, agentMlLow, agentMlHigh, agentLabelKey;
+  if(sc.agent==="etomidate"){ agentLow=w*0.2; agentHigh=w*0.4; agentMlLow=agentLow/2; agentMlHigh=agentHigh/2; agentLabelKey="Etomidate dose & volume"; }
+  else if(sc.agent==="ketamine"){ agentLow=w*1; agentHigh=w*2; agentMlLow=agentLow/sc.ketConc; agentMlHigh=agentHigh/sc.ketConc; agentLabelKey="Ketamine dose & volume"; }
+  else { agentLow=w*1; agentHigh=w*2; agentMlLow=agentLow/10; agentMlHigh=agentHigh/10; agentLabelKey="Propofol dose & volume"; }
+  gradeRange("meds","doseAgentMg","doseAgentMl","fbAgent",agentLabelKey, agentLow, agentHigh, agentMlLow, agentMlHigh, 0.08);
+
+  gradeTarget("meds","doseRocMg","doseRocMl","fbRoc","Rocuronium RSI dose & volume", w*1.2, w*1.2/10, 0.08);
+
+  const agentLabel = {etomidate:"Etomidate", ketamine:"Ketamine", propofol:"Propofol"}[sc.agent];
+
+  document.getElementById("medsAnswerKey").innerHTML = answerKeyHtml([
+    ["Correct agent", agentLabel],
+    ["Fentanyl", `${w*1}–${w*2} mcg (${round1(w*1/50)}–${round1(w*2/50)} mL)`],
+    ["Lidocaine", `${round1(w*1)} mg (${round1(w*1/20)} mL)`],
+    [agentLabel, `${round1(agentLow)}–${round1(agentHigh)} mg (${round1(agentMlLow)}–${round1(agentMlHigh)} mL)`],
+    ["Rocuronium", `${round1(w*1.2)} mg (${round1(w*1.2/10)} mL) — RSI dose`]
+  ]);
+}
+
+function medsAneurysmUnruptured(sc){
+  const useEsmolol = sc.heartRate >= 60;
+  const opioidCard = useEsmolol
+    ? doseCardHTML("Esmolol","10 mg/mL · fixed 30–50 mg IV","Dose (mg)","doseOpMg","doseOpMl","fbOp")
+    : doseCardHTML("Fentanyl","50 mcg/mL · 1–2 mcg/kg","Dose (mcg)","doseOpMg","doseOpMl","fbOp");
+  return `
+  <div class="panel">
+    <span class="section-tag">Medication management</span>
+    <h2>Induction doses for ${sc.weight} kg</h2>
+    <p class="desc">Baseline heart rate: <span class="mono" style="color:var(--teal);">${sc.heartRate} bpm</span></p>
+    <div class="field-block">
+      <div class="q">Choose the opioid/blunting agent to give before laryngoscopy.</div>
+      <div class="choices" id="opioidChoices">${choiceGroup("opioid",["Fentanyl","Esmolol"])}</div>
+      <div class="hint">Choose Fentanyl if HR &lt; 60 bpm, otherwise Esmolol.</div>
+    </div>
+    <div class="dose-grid">
+      ${opioidCard}
+      ${doseCardHTML("Lidocaine","20 mg/mL · 1 mg/kg","Dose (mg)","doseLidoMg","doseLidoMl","fbLido")}
+      ${doseCardHTML("Propofol","10 mg/mL · 1–2 mg/kg","Dose (mg)","dosePropMg","dosePropMl","fbProp")}
+      ${doseCardHTML("Rocuronium","10 mg/mL · 0.6 mg/kg","Dose (mg)","doseRocMg","doseRocMl","fbRoc")}
+    </div>
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMeds()">Check my doses</button></div>
+    <div id="medsAnswerKey"></div>
+  </div>`;
+}
+function checkMedsAneurysmUnruptured(sc){
+  const w=sc.weight;
+  const useEsmolol = sc.heartRate >= 60;
+  const opioidVal = document.querySelector('input[name="opioid"]:checked');
+  const correctIdx = useEsmolol ? 1 : 0;
+  markChoice("opioidChoices", opioidVal? +opioidVal.value:-1, correctIdx);
+  recordGrade("meds","Correct opioid/blunting agent chosen (HR-based)", opioidVal && +opioidVal.value===correctIdx);
+  if(useEsmolol){
+    gradeRange("meds","doseOpMg","doseOpMl","fbOp","Esmolol dose & volume", 30,50,3,5,0.05);
+  } else {
+    gradeRange("meds","doseOpMg","doseOpMl","fbOp","Fentanyl dose & volume", w*1, w*2, w*1/50, w*2/50, 0.05);
+  }
+  gradeTarget("meds","doseLidoMg","doseLidoMl","fbLido","Lidocaine dose & volume", w*1, w*1/20, 0.1);
+  gradeRange("meds","dosePropMg","dosePropMl","fbProp","Propofol dose & volume", w*1, w*2, w*1/10, w*2/10, 0.05);
+  gradeTarget("meds","doseRocMg","doseRocMl","fbRoc","Rocuronium dose & volume", w*0.6, w*0.6/10, 0.1);
+  document.getElementById("medsAnswerKey").innerHTML = answerKeyHtml([
+    ["Opioid/blunting agent", useEsmolol? "Esmolol (HR ≥60)":"Fentanyl (HR <60)"],
+    [useEsmolol?"Esmolol":"Fentanyl", useEsmolol? "30–50 mg (3–5 mL)" : `${w*1}–${w*2} mcg (${round1(w*1/50)}–${round1(w*2/50)} mL)`],
+    ["Lidocaine", `${round1(w*1)} mg (${round1(w*1/20)} mL)`],
+    ["Propofol", `${w*1}–${w*2} mg (${round1(w*1/10)}–${round1(w*2/10)} mL)`],
+    ["Rocuronium", `${round1(w*0.6)} mg (${round1(w*0.6/10)} mL)`]
+  ]);
+}
+
+function medsAneurysmRuptured(sc){
+  const useEsmolol = sc.heartRate >= 60;
+  const opioidCard = useEsmolol
+    ? doseCardHTML("Esmolol","10 mg/mL · fixed 30–50 mg IV","Dose (mg)","doseOpMg","doseOpMl","fbOp")
+    : doseCardHTML("Fentanyl","50 mcg/mL · 1–2 mcg/kg","Dose (mcg)","doseOpMg","doseOpMl","fbOp");
+  return `
+  <div class="panel">
+    <span class="section-tag">Medication management</span>
+    <h2>Induction doses for ${sc.weight} kg</h2>
+    <p class="desc">Baseline heart rate: <span class="mono" style="color:var(--teal);">${sc.heartRate} bpm</span></p>
+    <div class="field-block">
+      <div class="q">Choose the opioid/blunting agent to give before laryngoscopy.</div>
+      <div class="choices" id="opioidChoices">${choiceGroup("opioid",["Fentanyl","Esmolol"])}</div>
+      <div class="hint">Choose Fentanyl if HR &lt; 60 bpm, otherwise Esmolol.</div>
+    </div>
+    <div class="dose-grid">
+      ${opioidCard}
+      ${doseCardHTML("Lidocaine","20 mg/mL · 1 mg/kg","Dose (mg)","doseLidoMg","doseLidoMl","fbLido")}
+      ${doseCardHTML("Propofol","10 mg/mL · 1–2 mg/kg","Dose (mg)","dosePropMg","dosePropMl","fbProp")}
+      ${doseCardHTML("Rocuronium (RSI)","10 mg/mL · 1.2 mg/kg","Dose (mg)","doseRocMg","doseRocMl","fbRoc")}
+    </div>
+    <div class="callout crit"><b>RSI:</b> cricoid pressure applied prior to induction medications, released after cuff inflation is confirmed.</div>
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMeds()">Check my doses</button></div>
+    <div id="medsAnswerKey"></div>
+  </div>`;
+}
+function checkMedsAneurysmRuptured(sc){
+  const w=sc.weight;
+  const useEsmolol = sc.heartRate >= 60;
+  const opioidVal = document.querySelector('input[name="opioid"]:checked');
+  const correctIdx = useEsmolol ? 1 : 0;
+  markChoice("opioidChoices", opioidVal? +opioidVal.value:-1, correctIdx);
+  recordGrade("meds","Correct opioid/blunting agent chosen (HR-based)", opioidVal && +opioidVal.value===correctIdx);
+  if(useEsmolol){
+    gradeRange("meds","doseOpMg","doseOpMl","fbOp","Esmolol dose & volume",30,50,3,5,0.05);
+  } else {
+    gradeRange("meds","doseOpMg","doseOpMl","fbOp","Fentanyl dose & volume", w*1, w*2, w*1/50, w*2/50, 0.05);
+  }
+  gradeTarget("meds","doseLidoMg","doseLidoMl","fbLido","Lidocaine dose & volume", w*1, w*1/20, 0.1);
+  gradeRange("meds","dosePropMg","dosePropMl","fbProp","Propofol dose & volume", w*1, w*2, w*1/10, w*2/10, 0.05);
+  gradeTarget("meds","doseRocMg","doseRocMl","fbRoc","Rocuronium RSI dose & volume", w*1.2, w*1.2/10, 0.08);
+  document.getElementById("medsAnswerKey").innerHTML = answerKeyHtml([
+    ["Opioid/blunting agent", useEsmolol? "Esmolol (HR ≥60)":"Fentanyl (HR <60)"],
+    [useEsmolol?"Esmolol":"Fentanyl", useEsmolol? "30–50 mg (3–5 mL)" : `${w*1}–${w*2} mcg (${round1(w*1/50)}–${round1(w*2/50)} mL)`],
+    ["Lidocaine", `${round1(w*1)} mg (${round1(w*1/20)} mL)`],
+    ["Propofol", `${w*1}–${w*2} mg (${round1(w*1/10)}–${round1(w*2/10)} mL)`],
+    ["Rocuronium", `${round1(w*1.2)} mg (${round1(w*1.2/10)} mL) — RSI dose`]
+  ]);
+}
+
+function medsSDH(sc){
+  const rocPerKg = sc.emergent ? 1.2 : 0.6;
+  return `
+  <div class="panel">
+    <span class="section-tag">Medication management</span>
+    <h2>Induction doses for ${sc.weight} kg</h2>
+    <p class="desc">${sc.emergent ? "Emergent evacuation — RSI technique with a full intubating dose of rocuronium." : "Semi-urgent case — standard induction sequence."}</p>
+    <div class="dose-grid">
+      ${doseCardHTML("Fentanyl","50 mcg/mL · 1–2 mcg/kg","Dose (mcg)","doseFentMcg","doseFentMl","fbFent")}
+      ${doseCardHTML("Lidocaine","20 mg/mL · 1 mg/kg","Dose (mg)","doseLidoMg","doseLidoMl","fbLido")}
+      ${doseCardHTML("Propofol","10 mg/mL · 1–2 mg/kg","Dose (mg)","dosePropMg","dosePropMl","fbProp")}
+      ${doseCardHTML("Rocuronium","10 mg/mL · "+rocPerKg+" mg/kg"+(sc.emergent?" (RSI dose)":""),"Dose (mg)","doseRocMg","doseRocMl","fbRoc")}
+    </div>
+    ${sc.cspine ? `<div class="callout crit"><b>C-spine:</b> maintain manual in-line stabilization during laryngoscopy.</div>`:""}
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMeds()">Check my doses</button></div>
+    <div id="medsAnswerKey"></div>
+  </div>`;
+}
+function checkMedsSDH(sc){
+  const w=sc.weight;
+  const rocPerKg = sc.emergent?1.2:0.6;
+  gradeRange("meds","doseFentMcg","doseFentMl","fbFent","Fentanyl dose & volume", w*1, w*2, w*1/50, w*2/50, 0.05);
+  gradeTarget("meds","doseLidoMg","doseLidoMl","fbLido","Lidocaine dose & volume", w*1, w*1/20, 0.1);
+  gradeRange("meds","dosePropMg","dosePropMl","fbProp","Propofol dose & volume", w*1, w*2, w*1/10, w*2/10, 0.05);
+  gradeTarget("meds","doseRocMg","doseRocMl","fbRoc","Rocuronium dose & volume", w*rocPerKg, w*rocPerKg/10, 0.08);
+  document.getElementById("medsAnswerKey").innerHTML = answerKeyHtml([
+    ["Fentanyl", `${w*1}–${w*2} mcg (${round1(w*1/50)}–${round1(w*2/50)} mL)`],
+    ["Lidocaine", `${round1(w*1)} mg (${round1(w*1/20)} mL)`],
+    ["Propofol", `${w*1}–${w*2} mg (${round1(w*1/10)}–${round1(w*2/10)} mL)`],
+    ["Rocuronium", `${round1(w*rocPerKg)} mg (${round1(w*rocPerKg/10)} mL) — ${rocPerKg} mg/kg${sc.emergent?" RSI":""}`]
+  ]);
+}
+
+function medsACDF(sc){
+  const rocPerKg = sc.aspirationHighRisk ? 1.2 : 0.6;
+  return `
+  <div class="panel">
+    <span class="section-tag">Medication management</span>
+    <h2>Induction & infusion doses for ${sc.weight} kg</h2>
+    <p class="desc">${sc.aspirationHighRisk? "Elevated aspiration risk — RSI technique with a full intubating dose of rocuronium." : "Standard risk — routine intubating dose of rocuronium."} Volatile agents are avoided to preserve SEP/MEP signal quality; this is a total IV anesthetic.</p>
+    <div class="dose-grid">
+      ${doseCardHTML("Fentanyl","50 mcg/mL · 1–2 mcg/kg","Dose (mcg)","doseFentMcg","doseFentMl","fbFent")}
+      ${doseCardHTML("Lidocaine","20 mg/mL · 1 mg/kg","Dose (mg)","doseLidoMg","doseLidoMl","fbLido")}
+      ${doseCardHTML("Propofol","10 mg/mL · 1–2 mg/kg","Dose (mg)","dosePropMg","dosePropMl","fbProp")}
+      ${doseCardHTML("Rocuronium", "10 mg/mL · "+rocPerKg+" mg/kg"+(sc.aspirationHighRisk?" (RSI dose)":""), "Dose (mg)","doseRocMg","doseRocMl","fbRoc")}
+    </div>
+    <div class="callout crit"><b>Reversal:</b> reverse rocuronium immediately after intubation is confirmed — baseline MEPs require intact neuromuscular function, and no further paralytic is given for the remainder of the case.</div>
+    <div class="field-block" style="margin-top:16px;">
+      <div class="q">Sugammadex reversal dose</div>
+      <div class="dose-card">
+        <div class="conc">100 mg/mL · 16 mg/kg</div>
+        <div class="row">
+          <div class="fld"><label class="mini">Dose (mg)</label><input type="number" step="0.1" id="doseSuggMg"></div>
+          <div class="fld"><label class="mini">Volume (mL)</label><input type="number" step="0.1" id="doseSuggMl"></div>
+        </div>
+        <div class="feedback" id="fbSugg"></div>
+      </div>
+    </div>
+    <div class="field-block" style="margin-top:16px;">
+      <div class="q">Give dexamethasone?</div>
+      <div class="choices" id="dexChoices">${choiceGroup("dex",["Yes","No"])}</div>
+    </div>
+    <div class="field-block" style="margin-top:16px;">
+      <div class="q">Maintenance infusion range — propofol (mcg/kg/min)</div>
+      <div class="dose-card">
+        <div class="row">
+          <div class="fld"><label class="mini">Low (mcg/kg/min)</label><input type="number" step="1" id="propLow"></div>
+          <div class="fld"><label class="mini">High (mcg/kg/min)</label><input type="number" step="1" id="propHigh"></div>
+        </div>
+        <div class="feedback" id="fbPropRange"></div>
+      </div>
+    </div>
+    <div class="field-block">
+      <div class="q">Maintenance infusion range — remifentanil (mcg/kg/min)</div>
+      <div class="dose-card">
+        <div class="row">
+          <div class="fld"><label class="mini">Low (mcg/kg/min)</label><input type="number" step="0.05" id="remiLow"></div>
+          <div class="fld"><label class="mini">High (mcg/kg/min)</label><input type="number" step="0.05" id="remiHigh"></div>
+        </div>
+        <div class="feedback" id="fbRemiRange"></div>
+      </div>
+    </div>
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMeds()">Check my doses</button></div>
+    <div id="medsAnswerKey"></div>
+  </div>`;
+}
+function checkMedsACDF(sc){
+  const w=sc.weight;
+  const rocPerKg = sc.aspirationHighRisk?1.2:0.6;
+  gradeRange("meds","doseFentMcg","doseFentMl","fbFent","Fentanyl dose & volume", w*1, w*2, w*1/50, w*2/50, 0.05);
+  gradeTarget("meds","doseLidoMg","doseLidoMl","fbLido","Lidocaine dose & volume", w*1, w*1/20, 0.1);
+  gradeRange("meds","dosePropMg","dosePropMl","fbProp","Propofol dose & volume", w*1, w*2, w*1/10, w*2/10, 0.05);
+  gradeTarget("meds","doseRocMg","doseRocMl","fbRoc","Rocuronium dose & volume", w*rocPerKg, w*rocPerKg/10, 0.08);
+  gradeTarget("meds","doseSuggMg","doseSuggMl","fbSugg","Sugammadex reversal dose & volume", w*16, w*16/100, 0.08);
+
+  const dexVal = document.querySelector('input[name="dex"]:checked');
+  markChoice("dexChoices", dexVal? +dexVal.value:-1, 0);
+  recordGrade("meds","Dexamethasone given", dexVal && +dexVal.value===0);
+
+  const propLow = numVal("propLow"), propHigh = numVal("propHigh");
+  const propOk = Math.abs(propLow-75)<=15 && Math.abs(propHigh-150)<=15;
+  feedbackEl("fbPropRange", propOk, propOk? "✓ correct":"expected ~75–150 mcg/kg/min");
+  recordGrade("meds","Propofol infusion range (mcg/kg/min)", propOk);
+
+  const remiLow = numVal("remiLow"), remiHigh = numVal("remiHigh");
+  const remiOk = Math.abs(remiLow-0.1)<=0.1 && Math.abs(remiHigh-1)<=0.2;
+  feedbackEl("fbRemiRange", remiOk, remiOk? "✓ correct":"expected ~0.1–1 mcg/kg/min");
+  recordGrade("meds","Remifentanil infusion range (mcg/kg/min)", remiOk);
+
+  document.getElementById("medsAnswerKey").innerHTML = answerKeyHtml([
+    ["Fentanyl", `${w*1}–${w*2} mcg (${round1(w*1/50)}–${round1(w*2/50)} mL)`],
+    ["Lidocaine", `${round1(w*1)} mg (${round1(w*1/20)} mL)`],
+    ["Propofol", `${w*1}–${w*2} mg (${round1(w*1/10)}–${round1(w*2/10)} mL)`],
+    ["Rocuronium", `${round1(w*rocPerKg)} mg (${round1(w*rocPerKg/10)} mL) — ${rocPerKg} mg/kg${sc.aspirationHighRisk?" RSI":""}, reversed immediately after intubation`],
+    ["Sugammadex", `${round1(w*16)} mg (${round1(w*16/100)} mL) — 16 mg/kg`],
+    ["Dexamethasone","Yes — 10–12 mg IV"],
+    ["Propofol infusion","75–150 mcg/kg/min"],
+    ["Remifentanil infusion","0.1–1 mcg/kg/min"]
+  ]);
+}
+
+const MEDS_RENDER = { "awake-crani":medsAwakeCrani, "tbi-mri":medsTBIMRI, "aneurysm-unruptured":medsAneurysmUnruptured, "aneurysm-ruptured":medsAneurysmRuptured, "sdh-evacuation":medsSDH, "acdf-seps-meps":medsACDF };
+const MEDS_CHECK = { "awake-crani":checkMedsAwakeCrani, "tbi-mri":checkMedsTBIMRI, "aneurysm-unruptured":checkMedsAneurysmUnruptured, "aneurysm-ruptured":checkMedsAneurysmRuptured, "sdh-evacuation":checkMedsSDH, "acdf-seps-meps":checkMedsACDF };
+function renderMeds(){ const sc=state.scenario; resetGradedForStep("meds"); return MEDS_RENDER[sc.key](sc); }
+function checkMeds(){ MEDS_CHECK[state.scenario.key](state.scenario); }
+
+/* ============================= STEP: MAINTENANCE ============================= */
+function maintAwakeCrani(sc){
+  const edemaBlock = sc.edematous ? `
+    <div class="field-block" style="margin-top:16px;">
+      <div class="q">Brain is edematous/bulging — calculate ONE rescue option.</div>
+      <div class="dose-grid">
+        ${doseCardSingleHTML("Mannitol (20%)","0.5 g/kg · 20% soln = 0.2 g/mL","Dose (g)","doseMan","fbMan")}
+        ${doseCardSingleHTML("3% Hypertonic Saline","fixed 100–200 mL bolus","Volume (mL)","doseSaline","fbSaline")}
+      </div>
+      <div class="hint">Give either one — you don't need both.</div>
+    </div>` : "";
+  return `
+  <div class="panel">
+    <span class="section-tag">Maintenance & hemodynamic priorities</span>
+    <h2>Keep this patient stable</h2>
+    <div class="checklist" id="maintChecklist">
+      <label data-i="0"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Maintenance with a dexmedetomidine infusion</span></label>
+      <label data-i="1"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Arterial line insertion delegated to another provider</span></label>
+      <label data-i="2"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Spontaneous ventilation initiated once the scalp is opened</span></label>
+      <label data-i="3"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Avoid benzodiazepines</span></label>
+      <label data-i="4"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Avoid long-acting opioids</span></label>
+    </div>
+    <div class="field-block" style="margin-top:16px;">
+      <div class="q">Dexmedetomidine bolus range (mcg/kg)</div>
+      <div class="dose-card">
+        <div class="row">
+          <div class="fld"><label class="mini">Low (mcg/kg)</label><input type="number" step="0.1" id="dexBolusLow"></div>
+          <div class="fld"><label class="mini">High (mcg/kg)</label><input type="number" step="0.1" id="dexBolusHigh"></div>
+        </div>
+        <div class="feedback" id="fbDexBolus"></div>
+      </div>
+    </div>
+    <div class="field-block">
+      <div class="q">Dexmedetomidine infusion range (mcg/kg/hr)</div>
+      <div class="dose-card">
+        <div class="row">
+          <div class="fld"><label class="mini">Low (mcg/kg/hr)</label><input type="number" step="0.1" id="dexInfLow"></div>
+          <div class="fld"><label class="mini">High (mcg/kg/hr)</label><input type="number" step="0.1" id="dexInfHigh"></div>
+        </div>
+        <div class="feedback" id="fbDexInf"></div>
+      </div>
+    </div>
+    ${edemaBlock}
+    ${vitalsCheckHTML(sc)}
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMaintenance()">Check answers</button></div>
+    <div id="maintAnswerKey"></div>
+  </div>`;
+}
+function checkMaintAwakeCrani(sc){
+  const w=sc.weight;
+  checkVitals(sc);
+  const boxes=[...document.querySelectorAll('#maintChecklist input[type=checkbox]')];
+  recordGrade("maintenance","Maintenance checklist complete", boxes.every(b=>b.checked));
+
+  const bLow=numVal("dexBolusLow"), bHigh=numVal("dexBolusHigh");
+  const bOk = Math.abs(bLow-0.2)<=0.15 && Math.abs(bHigh-1)<=0.2;
+  feedbackEl("fbDexBolus", bOk, bOk?"✓ correct":"expected ~0.2–1 mcg/kg");
+  recordGrade("maintenance","Dexmedetomidine bolus range", bOk);
+
+  const iLow=numVal("dexInfLow"), iHigh=numVal("dexInfHigh");
+  const iOk = Math.abs(iLow-0.2)<=0.15 && Math.abs(iHigh-1.5)<=0.3;
+  feedbackEl("fbDexInf", iOk, iOk?"✓ correct":"expected ~0.2–1.5 mcg/kg/hr");
+  recordGrade("maintenance","Dexmedetomidine infusion range", iOk);
+
+  let edemaKey = "";
+  if(sc.edematous){
+    const manG = round1(w*0.5);
+    const manOk = withinTarget(numVal("doseMan"), manG, 0.15);
+    feedbackEl("fbMan", manOk, manOk?"✓ correct":`expected ~${manG} g`);
+    const salOk = within(numVal("doseSaline"), 100, 200, 0.05);
+    feedbackEl("fbSaline", salOk, salOk?"✓ within range":"expected 100–200 mL");
+    recordGrade("maintenance","Brain relaxation rescue (mannitol or 3% saline)", manOk || salOk);
+    edemaKey = `<div><b>Mannitol:</b> ~${manG} g (0.5 g/kg). <b>Or 3% saline:</b> 100–200 mL.</div>`;
+  }
+  document.getElementById("maintAnswerKey").innerHTML = answerKeyHtml([
+    ["Maintenance","Spontaneous ventilation once the scalp is opened, arterial line delegated."],
+    ["Dexmedetomidine bolus","0.2–1 mcg/kg"],
+    ["Dexmedetomidine infusion","0.2–1.5 mcg/kg/hr"],
+    vitalsAnswerRow(sc)
+  ]) + edemaKey;
+}
+
+function maintTBIMRI(sc){
+  return `
+  <div class="panel">
+    <span class="section-tag">Maintenance & hemodynamic priorities</span>
+    <h2>Protect cerebral perfusion during transport/scan</h2>
+    <div class="field-block">
+      <div class="q">Hemodynamic goal for this TBI patient?</div>
+      <div class="choices" id="hemoChoices">${choiceGroup("hemo",["CPP ≥60 mmHg (MAP ≥80 mmHg)","MAP as low as tolerated","No specific target needed"])}</div>
+    </div>
+    <div class="field-block">
+      <div class="q">Ventilation target?</div>
+      <div class="choices" id="etco2Choices">${choiceGroup("etco2",["Hyperventilate to EtCO2 25–30 mmHg","Maintain normocapnia (~35–40 mmHg) — avoid hyperventilation","Permissive hypercapnia, EtCO2 &gt;50 mmHg"])}</div>
+    </div>
+    <div class="checklist" id="maintChecklist">
+      <label data-i="0"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Avoid corticosteroids</span></label>
+      <label data-i="1"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Avoid D5W or LR — use normal saline</span></label>
+      <label data-i="2"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Continuously monitor for airway obstruction</span></label>
+    </div>
+    ${vitalsCheckHTML(sc)}
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMaintenance()">Check answers</button></div>
+    <div id="maintAnswerKey"></div>
+  </div>`;
+}
+function checkMaintTBIMRI(sc){
+  checkVitals(sc);
+  const hemoVal = document.querySelector('input[name="hemo"]:checked');
+  markChoice("hemoChoices", hemoVal? +hemoVal.value:-1, 0);
+  recordGrade("maintenance","CPP/MAP goal identified", hemoVal && +hemoVal.value===0);
+  const etVal = document.querySelector('input[name="etco2"]:checked');
+  markChoice("etco2Choices", etVal? +etVal.value:-1, 1);
+  recordGrade("maintenance","Avoids hyperventilation", etVal && +etVal.value===1);
+  const boxes=[...document.querySelectorAll('#maintChecklist input[type=checkbox]')];
+  recordGrade("maintenance","Fluid/steroid & airway vigilance checklist", boxes.every(b=>b.checked));
+  document.getElementById("maintAnswerKey").innerHTML = answerKeyHtml([
+    ["Goal","CPP ≥60 mmHg / MAP ≥80 mmHg"],
+    ["Ventilation","Normocapnia ~35–40 mmHg — no hyperventilation"],
+    ["Fluids","Avoid D5W/LR and corticosteroids"],
+    vitalsAnswerRow(sc)
+  ]);
+}
+
+function maintAneurysmUnruptured(sc){
+  return `
+  <div class="panel">
+    <span class="section-tag">Maintenance & hemodynamic priorities</span>
+    <h2>Keep this patient stable</h2>
+    <div class="checklist" id="maintChecklist">
+      <label data-i="0"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Arterial line insertion delegated to another provider</span></label>
+      <label data-i="1"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Avoid benzodiazepines</span></label>
+      <label data-i="2"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Avoid long-acting opioids</span></label>
+    </div>
+    <div class="field-block" style="margin-top:14px;">
+      <div class="q">SBP goal prior to clipping?</div>
+      <div class="choices" id="sbpPreChoices">${choiceGroup("sbpPre",["100–120 mmHg","120–150 mmHg","150–180 mmHg"])}</div>
+    </div>
+    <div class="field-block">
+      <div class="q">SBP goal after clipping?</div>
+      <div class="choices" id="sbpPostChoices">${choiceGroup("sbpPost",["&lt;140 mmHg","&lt;160 mmHg","&lt;180 mmHg"])}</div>
+    </div>
+    <div class="field-block">
+      <div class="q">EtCO2 goal?</div>
+      <div class="choices" id="etco2Choices">${choiceGroup("etco2",["25–30 mmHg","35–45 mmHg","45–55 mmHg"])}</div>
+    </div>
+    <div class="field-block">
+      <div class="q">Which agents control hypertension and prevent rupture? (check all that apply)</div>
+      <div class="checklist" id="antihtnChecklist">
+        <label><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Nicardipine</span></label>
+        <label><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Labetalol</span></label>
+        <label><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Esmolol</span></label>
+        <label><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Ephedrine</span></label>
+        <label><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Phenylephrine</span></label>
+      </div>
+    </div>
+    ${vitalsCheckHTML(sc)}
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMaintenance()">Check answers</button></div>
+    <div id="maintAnswerKey"></div>
+  </div>`;
+}
+function checkMaintAneurysmUnruptured(sc){
+  checkVitals(sc);
+  const boxes=[...document.querySelectorAll('#maintChecklist input[type=checkbox]')];
+  recordGrade("maintenance","Maintenance checklist complete", boxes.every(b=>b.checked));
+  const pre=document.querySelector('input[name="sbpPre"]:checked');
+  markChoice("sbpPreChoices", pre?+pre.value:-1, 1);
+  recordGrade("maintenance","SBP goal pre-clip (120–150 mmHg)", pre && +pre.value===1);
+  const post=document.querySelector('input[name="sbpPost"]:checked');
+  markChoice("sbpPostChoices", post?+post.value:-1, 2);
+  recordGrade("maintenance","SBP goal post-clip (<180 mmHg)", post && +post.value===2);
+  const et=document.querySelector('input[name="etco2"]:checked');
+  markChoice("etco2Choices", et?+et.value:-1, 0);
+  recordGrade("maintenance","EtCO2 goal (25–30 mmHg)", et && +et.value===0);
+  const ah=[...document.querySelectorAll('#antihtnChecklist input[type=checkbox]')];
+  const ahOk = ah[0].checked && ah[1].checked && ah[2].checked && !ah[3].checked && !ah[4].checked;
+  recordGrade("maintenance","Correct antihypertensive agents selected", ahOk);
+  document.getElementById("maintAnswerKey").innerHTML = answerKeyHtml([
+    ["SBP pre-clip","120–150 mmHg"],
+    ["SBP post-clip","<180 mmHg"],
+    ["EtCO2","25–30 mmHg"],
+    ["Antihypertensives","Nicardipine, Labetalol, Esmolol"],
+    vitalsAnswerRow(sc)
+  ]);
+}
+
+function maintAneurysmRuptured(sc){
+  const edemaBlock = sc.edematous ? `
+    <div class="field-block" style="margin-top:16px;">
+      <div class="q">Brain is edematous — calculate ONE rescue option.</div>
+      <div class="dose-grid">
+        ${doseCardSingleHTML("Mannitol (20%)","0.5 g/kg · 20% soln = 0.2 g/mL","Dose (g)","doseMan","fbMan")}
+        ${doseCardSingleHTML("3% Hypertonic Saline","fixed 100–200 mL bolus","Volume (mL)","doseSaline","fbSaline")}
+      </div>
+      <div class="hint">Give either one.</div>
+    </div>` : "";
+  return `
+  <div class="panel">
+    <span class="section-tag">Maintenance & hemodynamic priorities</span>
+    <h2>Keep this patient stable pre-clip</h2>
+    <div class="checklist" id="maintChecklist">
+      <label data-i="0"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Arterial line insertion delegated to another provider</span></label>
+      <label data-i="1"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Dexamethasone given</span></label>
+      <label data-i="2"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Avoid benzodiazepines</span></label>
+    </div>
+    <div class="field-block" style="margin-top:14px;">
+      <div class="q">SBP goal during maintenance, pre-clip?</div>
+      <div class="choices" id="sbpChoices">${choiceGroup("sbp",["&lt;140 mmHg","&lt;160 mmHg","&lt;180 mmHg"])}</div>
+    </div>
+    ${edemaBlock}
+    ${vitalsCheckHTML(sc)}
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMaintenance()">Check answers</button></div>
+    <div id="maintAnswerKey"></div>
+  </div>`;
+}
+function checkMaintAneurysmRuptured(sc){
+  const w=sc.weight;
+  checkVitals(sc);
+  const boxes=[...document.querySelectorAll('#maintChecklist input[type=checkbox]')];
+  recordGrade("maintenance","Maintenance checklist complete", boxes.every(b=>b.checked));
+  const sbp=document.querySelector('input[name="sbp"]:checked');
+  markChoice("sbpChoices", sbp?+sbp.value:-1, 1);
+  recordGrade("maintenance","SBP goal (<160 mmHg)", sbp && +sbp.value===1);
+  let edemaKey="";
+  if(sc.edematous){
+    const manG = round1(w*0.5);
+    const manOk = withinTarget(numVal("doseMan"), manG, 0.15);
+    feedbackEl("fbMan", manOk, manOk?"✓ correct":`expected ~${manG} g`);
+    const salOk = within(numVal("doseSaline"),100,200,0.05);
+    feedbackEl("fbSaline", salOk, salOk?"✓ within range":"expected 100–200 mL");
+    recordGrade("maintenance","Brain relaxation rescue (mannitol or 3% saline)", manOk||salOk);
+    edemaKey = `<div><b>Mannitol:</b> ~${manG} g (0.5 g/kg). <b>Or 3% saline:</b> 100–200 mL.</div>`;
+  }
+  document.getElementById("maintAnswerKey").innerHTML = answerKeyHtml([["SBP goal","<160 mmHg during maintenance, pre-clip"], vitalsAnswerRow(sc)]) + edemaKey;
+}
+
+function maintSDH(sc){
+  return `
+  <div class="panel">
+    <span class="section-tag">Maintenance & hemodynamic priorities</span>
+    <h2>Protect cerebral perfusion</h2>
+    <div class="checklist" id="maintChecklist">
+      <label data-i="0"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Arterial line insertion delegated to another provider</span></label>
+      <label data-i="1"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Avoid D5W or LR — use normal saline</span></label>
+      <label data-i="2"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Avoid corticosteroids</span></label>
+    </div>
+    <div class="field-block" style="margin-top:14px;">
+      <div class="q">Hemodynamic goal?</div>
+      <div class="choices" id="hemoChoices">${choiceGroup("hemo",["CPP ≥60 mmHg (MAP ≥80 mmHg)","MAP as low as tolerated","No specific target"])}</div>
+    </div>
+    ${vitalsCheckHTML(sc)}
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMaintenance()">Check answers</button></div>
+    <div id="maintAnswerKey"></div>
+  </div>`;
+}
+function checkMaintSDH(sc){
+  checkVitals(sc);
+  const boxes=[...document.querySelectorAll('#maintChecklist input[type=checkbox]')];
+  recordGrade("maintenance","Fluid/steroid & art line checklist", boxes.every(b=>b.checked));
+  const hemoVal=document.querySelector('input[name="hemo"]:checked');
+  markChoice("hemoChoices", hemoVal?+hemoVal.value:-1, 0);
+  recordGrade("maintenance","CPP/MAP goal identified", hemoVal && +hemoVal.value===0);
+  document.getElementById("maintAnswerKey").innerHTML = answerKeyHtml([["Goal","CPP ≥60 mmHg / MAP ≥80 mmHg"],["Fluids","Avoid D5W/LR and corticosteroids"], vitalsAnswerRow(sc)]);
+}
+
+function maintACDF(sc){
+  return `
+  <div class="panel">
+    <span class="section-tag">Maintenance & hemodynamic priorities</span>
+    <h2>Preserve SEP/MEP signal quality</h2>
+    <div class="field-block">
+      <div class="q">Which maintenance technique preserves SEP/MEP signal quality?</div>
+      <div class="choices" id="tivaChoices">${choiceGroup("tiva",["TIVA with propofol + remifentanil, no volatile agent","Balanced technique with high-dose volatile agent","Volatile agent alone, no opioid infusion"])}</div>
+    </div>
+    <div class="checklist" id="maintChecklist">
+      <label data-i="0"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Arterial line insertion delegated to another provider</span></label>
+      <label data-i="1"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Blood pressure kept within 10% of the patient's baseline</span></label>
+    </div>
+    <div class="field-block" style="margin-top:16px;">
+      <div class="q">Baseline (normal) SBP for this patient: <span class="mono" style="color:var(--teal);font-size:16px;">${sc.vitalBaseline} mmHg</span></div>
+      <div class="q" style="margin-top:8px;">Calculate the lowest acceptable SBP (within 10% of baseline).</div>
+      <input type="number" step="0.1" id="acdfLowBP" style="max-width:160px;">
+      <div class="feedback" id="fbAcdfLowBP"></div>
+    </div>
+    <div class="field-block" style="margin-top:16px;">
+      <div class="q">Current SBP: <span class="mono" style="color:var(--teal);font-size:16px;">${sc.currentVital} ${sc.vitalUnit}</span> &nbsp;·&nbsp; HR: <span class="mono" style="color:var(--teal);font-size:16px;">${sc.vitalsHR} bpm</span></div>
+      <div class="choices" id="vitalsChoices">${choiceGroup("vitals",["No treatment needed — within range","Treat with Esmolol","Treat with Phenylephrine","Treat with Ephedrine","Treat with Nicardipine"])}</div>
+      <div class="hint">High BP: Esmolol or Nicardipine are both fine if HR &gt; 60 bpm; use Nicardipine alone if HR ≤ 60 bpm. Low BP: Ephedrine or Phenylephrine are both fine if HR &gt; 70 bpm; use Ephedrine alone if HR ≤ 70 bpm.</div>
+    </div>
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkMaintenance()">Check answers</button></div>
+    <div id="maintAnswerKey"></div>
+  </div>`;
+}
+function checkMaintACDF(sc){
+  checkVitals(sc);
+  const lowTarget = round1(sc.vitalBaseline*0.9);
+  const lowOk = withinTarget(numVal("acdfLowBP"), lowTarget, 0.03);
+  feedbackEl("fbAcdfLowBP", lowOk, lowOk? "✓ correct" : `expected ~${lowTarget} mmHg`);
+  recordGrade("maintenance","Lowest acceptable SBP calculated (baseline − 10%)", lowOk);
+  const tivaVal=document.querySelector('input[name="tiva"]:checked');
+  markChoice("tivaChoices", tivaVal?+tivaVal.value:-1, 0);
+  recordGrade("maintenance","TIVA chosen to preserve SEP/MEP signals", tivaVal && +tivaVal.value===0);
+  const boxes=[...document.querySelectorAll('#maintChecklist input[type=checkbox]')];
+  recordGrade("maintenance","Art line & BP-within-10% checklist", boxes.every(b=>b.checked));
+  document.getElementById("maintAnswerKey").innerHTML = answerKeyHtml([["Technique","TIVA — avoid volatile agents to preserve SEP/MEP fidelity"],["Lowest acceptable SBP", `${lowTarget} mmHg (baseline ${sc.vitalBaseline} − 10%)`], vitalsAnswerRow(sc)]);
+}
+
+const MAINT_RENDER = { "awake-crani":maintAwakeCrani, "tbi-mri":maintTBIMRI, "aneurysm-unruptured":maintAneurysmUnruptured, "aneurysm-ruptured":maintAneurysmRuptured, "sdh-evacuation":maintSDH, "acdf-seps-meps":maintACDF };
+const MAINT_CHECK = { "awake-crani":checkMaintAwakeCrani, "tbi-mri":checkMaintTBIMRI, "aneurysm-unruptured":checkMaintAneurysmUnruptured, "aneurysm-ruptured":checkMaintAneurysmRuptured, "sdh-evacuation":checkMaintSDH, "acdf-seps-meps":checkMaintACDF };
+function renderMaintenance(){ const sc=state.scenario; resetGradedForStep("maintenance"); return MAINT_RENDER[sc.key](sc); }
+function checkMaintenance(){ MAINT_CHECK[state.scenario.key](state.scenario); }
+
+/* ============================= STEP: EMERGENCE ============================= */
+function emergAwakeCrani(sc){
+  return `
+  <div class="panel">
+    <span class="section-tag">Emergence</span>
+    <h2>Transition back for closure</h2>
+    <div class="checklist" id="emergChecklist">
+      <label data-i="0"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>LMA removed and sedation turned off/decreased before the bone flap is removed</span></label>
+      <label data-i="1"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Patient awake and cooperative for mapping</span></label>
+      <label data-i="2"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Neuro exam: follows commands</span></label>
+      <label data-i="3"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Neuro exam: moves all extremities</span></label>
+    </div>
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkEmergence()">Check answers</button></div>
+    <div id="emergAnswerKey"></div>
+  </div>`;
+}
+function checkEmergAwakeCrani(sc){
+  const boxes=[...document.querySelectorAll('#emergChecklist input[type=checkbox]')];
+  recordGrade("emergence","Transition and neuro exam checklist", boxes.every(b=>b.checked));
+  document.getElementById("emergAnswerKey").innerHTML = answerKeyHtml([["Key step","Remove the LMA and wean sedation before the flap is removed, well ahead of the awake mapping portion."]]);
+}
+
+function emergTBIMRI(sc){
+  return `
+  <div class="panel">
+    <span class="section-tag">Emergence</span>
+    <h2>This patient does not emerge here</h2>
+    <p class="desc">A severe TBI patient going for imaging typically remains intubated and sedated for safe transport — there's no extubation or wake-up at this stage.</p>
+    <div class="checklist" id="emergChecklist">
+      <label data-i="0"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Sedation and ventilation continued for transport</span></label>
+      <label data-i="1"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>C-spine precautions maintained throughout transfer</span></label>
+      <label data-i="2"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Hemodynamic and ventilator monitoring continued en route</span></label>
+    </div>
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkEmergence()">Confirm</button></div>
+    <div id="emergAnswerKey"></div>
+  </div>`;
+}
+function checkEmergTBIMRI(sc){
+  const boxes=[...document.querySelectorAll('#emergChecklist input[type=checkbox]')];
+  recordGrade("emergence","Transport safety checklist", boxes.every(b=>b.checked));
+  document.getElementById("emergAnswerKey").innerHTML = answerKeyHtml([["Disposition","Remains intubated/sedated — no extubation planned for this encounter."]]);
+}
+
+function emergGeneric(sc){
+  return `
+  <div class="panel">
+    <span class="section-tag">Emergence</span>
+    <h2>Bring this patient up for a neuro exam</h2>
+    <div class="field-block">
+      <div class="q">Neuromuscular blockade reversal?</div>
+      <div class="choices" id="revChoices">${choiceGroup("rev",["Yes — reverse if applicable, confirmed by train-of-four","No reversal needed regardless of TOF","Reversal is only for RSI cases"])}</div>
+    </div>
+    <div class="field-block">
+      <div class="q">Emergence SBP goal?</div>
+      <div class="choices" id="sbpChoices">${choiceGroup("sbp",["120–140 mmHg, supported with a Cardene (nicardipine) infusion as needed","No specific SBP goal at emergence","As high as tolerated"])}</div>
+    </div>
+    <div class="checklist" id="emergChecklist">
+      <label data-i="0"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Smooth emergence — minimal to no coughing or bucking</span></label>
+      <label data-i="1"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Neuro exam: follows commands</span></label>
+      <label data-i="2"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Neuro exam: moves all extremities</span></label>
+    </div>
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkEmergence()">Check answers</button></div>
+    <div id="emergAnswerKey"></div>
+  </div>`;
+}
+function checkEmergGeneric(sc){
+  const revVal=document.querySelector('input[name="rev"]:checked');
+  markChoice("revChoices", revVal?+revVal.value:-1, 0);
+  recordGrade("emergence","Appropriate reversal of neuroblockade", revVal && +revVal.value===0);
+  const sbpVal=document.querySelector('input[name="sbp"]:checked');
+  markChoice("sbpChoices", sbpVal?+sbpVal.value:-1, 0);
+  recordGrade("emergence","Emergence SBP goal (120–140 mmHg, Cardene)", sbpVal && +sbpVal.value===0);
+  const boxes=[...document.querySelectorAll('#emergChecklist input[type=checkbox]')];
+  recordGrade("emergence","Smooth emergence & full neuro exam", boxes.every(b=>b.checked));
+  document.getElementById("emergAnswerKey").innerHTML = answerKeyHtml([["Reversal","Per TOF, if applicable"],["SBP goal","120–140 mmHg with a Cardene infusion"]]);
+}
+
+function emergAneurysmRuptured(sc){
+  return `
+  <div class="panel">
+    <span class="section-tag">Emergence</span>
+    <h2>Controlled emergence, SBP 120–140 mmHg</h2>
+    <div class="field-block">
+      <div class="q">Neuromuscular blockade reversal?</div>
+      <div class="choices" id="revChoices">${choiceGroup("rev",["Yes — reverse if applicable, confirmed by train-of-four","No reversal needed regardless of TOF","Reversal is only for RSI cases"])}</div>
+    </div>
+    <div class="field-block">
+      <div class="q">Cardene (nicardipine) is mixed at 100 mcg/mL. If you start the infusion at 5 mg/hr, what's the pump rate in mL/hr? (range: 2.5–15 mg/hr)</div>
+      <input type="number" step="0.1" id="cardeneRate" style="max-width:160px;">
+      <div class="feedback" id="fbCardene"></div>
+    </div>
+    <div class="checklist" id="emergChecklist">
+      <label data-i="0"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Smooth emergence — minimal to no coughing or bucking</span></label>
+      <label data-i="1"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Neuro exam: follows commands</span></label>
+      <label data-i="2"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Neuro exam: moves all extremities</span></label>
+    </div>
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkEmergence()">Check answers</button></div>
+    <div id="emergAnswerKey"></div>
+  </div>`;
+}
+function checkEmergAneurysmRuptured(sc){
+  const revVal=document.querySelector('input[name="rev"]:checked');
+  markChoice("revChoices", revVal?+revVal.value:-1, 0);
+  recordGrade("emergence","Appropriate reversal of neuroblockade", revVal && +revVal.value===0);
+  const correctRate = round1(5*1000/100);
+  const ok = withinTarget(numVal("cardeneRate"), correctRate, 0.05);
+  feedbackEl("fbCardene", ok, ok?"✓ correct":`expected ${correctRate} mL/hr`);
+  recordGrade("emergence","Cardene infusion rate conversion", ok);
+  const boxes=[...document.querySelectorAll('#emergChecklist input[type=checkbox]')];
+  recordGrade("emergence","Smooth emergence & full neuro exam", boxes.every(b=>b.checked));
+  document.getElementById("emergAnswerKey").innerHTML = answerKeyHtml([
+    ["SBP goal","120–140 mmHg"],
+    ["Cardene","2.5–15 mg/hr at 100 mcg/mL — 5 mg/hr = 50 mL/hr"]
+  ]);
+}
+
+function emergACDF(sc){
+  return `
+  <div class="panel">
+    <span class="section-tag">Emergence</span>
+    <h2>Smooth extubation, confirm cord function</h2>
+    <div class="field-block">
+      <div class="q">Blunt the cough reflex before extubation.</div>
+      <div class="dose-grid">
+        ${doseCardSingleHTML("Lidocaine","20 mg/mL · 1–1.5 mg/kg","Dose (mg)","doseLidoEm","fbLidoEm")}
+      </div>
+    </div>
+    <div class="checklist" id="emergChecklist">
+      <label data-i="0"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Smooth emergence — minimal to no coughing or bucking</span></label>
+      <label data-i="1"><input type="checkbox" onchange="NX.toggleCheck(this)"> <span>Voluntary movement of all four extremities confirmed post-extubation</span></label>
+    </div>
+    <div class="btn-row"><button class="nx-btn-check" onclick="NX.checkEmergence()">Check answers</button></div>
+    <div id="emergAnswerKey"></div>
+  </div>`;
+}
+function checkEmergACDF(sc){
+  const w=sc.weight;
+  const lidoLow=w*1, lidoHigh=w*1.5;
+  const lidoOk = within(numVal("doseLidoEm"), lidoLow, lidoHigh, 0.05);
+  feedbackEl("fbLidoEm", lidoOk, lidoOk?"✓ within range":`expected ${round1(lidoLow)}–${round1(lidoHigh)} mg`);
+  recordGrade("emergence","Lidocaine dosed correctly to blunt cough reflex", lidoOk);
+  const boxes=[...document.querySelectorAll('#emergChecklist input[type=checkbox]')];
+  recordGrade("emergence","Smooth emergence & extremity check", boxes.every(b=>b.checked));
+  document.getElementById("emergAnswerKey").innerHTML = answerKeyHtml([
+    ["Lidocaine", `${round1(lidoLow)}–${round1(lidoHigh)} mg`]
+  ]);
+}
+
+const EMERG_RENDER = { "awake-crani":emergAwakeCrani, "tbi-mri":emergTBIMRI, "aneurysm-unruptured":emergGeneric, "aneurysm-ruptured":emergAneurysmRuptured, "sdh-evacuation":emergGeneric, "acdf-seps-meps":emergACDF };
+const EMERG_CHECK = { "awake-crani":checkEmergAwakeCrani, "tbi-mri":checkEmergTBIMRI, "aneurysm-unruptured":checkEmergGeneric, "aneurysm-ruptured":checkEmergAneurysmRuptured, "sdh-evacuation":checkEmergGeneric, "acdf-seps-meps":checkEmergACDF };
+function renderEmergence(){ const sc=state.scenario; resetGradedForStep("emergence"); return EMERG_RENDER[sc.key](sc); }
+function checkEmergence(){ EMERG_CHECK[state.scenario.key](state.scenario); }
+
+/* ============================= STEP: SUMMARY ============================= */
+function renderSummary(){
+  const all = allGraded();
+  const total = all.length;
+  const correct = all.filter(g=>g.correct===true).length;
+  const pct = total ? Math.round((correct/total)*100) : 0;
+  let band = "remediate", bandName = "Remediation Required";
+  if(pct>=90){band="pass"; bandName="Pass";}
+  else if(pct>=70){band="suggest"; bandName="Pass with Suggestions for Improvement";}
+  const bySection = {};
+  all.forEach(g=>{ (bySection[g.step] = bySection[g.step]||[]).push(g); });
+  const sectionNames = {assessment:"Assessment & Plan", preinduction:"Pre-Induction", airway:"Airway Management", meds:"Medication Management", maintenance:"Maintenance & Hemodynamics", emergence:"Emergence"};
+  let rows = "";
+  Object.keys(sectionNames).forEach(k=>{
+    const items = bySection[k] || [];
+    if(!items.length) return;
+    const c = items.filter(i=>i.correct).length;
+    rows += `<div class="summary-row"><span class="n">${sectionNames[k]}</span><span class="s">${c}/${items.length}</span></div>`;
+  });
+  let missed = all.filter(g=>!g.correct);
+  let missedHtml = missed.length ? `
+    <div class="panel" style="margin-top:16px;">
+      <span class="section-tag">Review</span>
+      <h2 style="font-size:17px;">Items to revisit</h2>
+      <div class="checklist">
+        ${missed.map(m=>`<label><span>• ${m.label}</span></label>`).join("")}
+      </div>
+    </div>` : "";
+  return `
+  <div class="band ${band}">
+    <div class="pct">${pct}%</div>
+    <div class="name">${bandName}</div>
+  </div>
+  <div class="panel">
+    <span class="section-tag">Scorecard</span>
+    <h2>${correct} of ${total} checks correct</h2>
+    <div class="summary-grid">${rows}</div>
+    <div class="btn-row">
+      <button class="nx-btn-primary" onclick="NX.newScenario()">Run a new scenario →</button>
+      <button class="btn-ghost" onclick="NX.goStep(0)">Review this case</button>
+    </div>
+  </div>
+  ${missedHtml}
+  `;
+}
+
+/* ============================= MAIN RENDER ============================= */
+const STEP_RENDERERS = [renderChart, renderAssessment, renderPreinduction, renderAirway, renderMeds, renderMaintenance, renderEmergence, renderSummary];
+
+function render(){
+  const app = document.getElementById("neuro-app");
+  let body = STEP_RENDERERS[state.stepIndex]();
+  let footerNav = "";
+  if(state.stepIndex>0 && state.stepIndex < STEP_KEYS.length-1){
+    footerNav = `<div class="btn-row">
+      <button class="btn-ghost" onclick="NX.prevStep()">← Back</button>
+      <button class="nx-btn-primary" onclick="NX.nextStep()">${state.stepIndex===STEP_KEYS.length-2? "See summary →":"Continue →"}</button>
+    </div>`;
+  }
+  app.innerHTML = `
+    ${railHtml()}
+    ${monitorHtml()}
+    ${body}
+    ${footerNav}
+    <footer>Randomized Induction Sequence — Neuro Sim &middot; built from the DBAP810 rubric &middot; educational practice tool, not a clinical reference</footer>
+  `;
+}
+
+/* ============================= INIT ============================= */
+
+window.NX={checkAirway,checkAssessment,checkEmergence,checkMaintenance,checkMeds,checkPreinduction,goStep,newScenario,nextStep,prevStep,toggleCheck};
+})();
 </script>
 </body>
 </html>
