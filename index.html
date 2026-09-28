@@ -1193,8 +1193,12 @@ function checkAssessment(){
   ]);
   if(riskVal){
     state.assessmentAnswered = true;
-    const monitorEl = document.querySelector(".monitor");
-    if(monitorEl) monitorEl.outerHTML = monitorHtml();
+    const riskVital = document.querySelector("#neuro-app .monitor .vital:nth-of-type(3)") || document.querySelectorAll("#neuro-app .monitor .vital")[1];
+    if(riskVital){
+      riskVital.classList.remove("risk-high","risk-low");
+      riskVital.classList.add(sc.aspiration==="High"?"risk-high":"risk-low");
+      riskVital.querySelector(".value").textContent = sc.aspiration;
+    }
   }
 }
 
@@ -2158,7 +2162,23 @@ function render(){
 
 /* ============================= INIT ============================= */
 
-window.NX={checkAirway,checkAssessment,checkEmergence,checkMaintenance,checkMeds,checkPreinduction,goStep,newScenario,nextStep,prevStep,toggleCheck};
+const _nx={checkAirway,checkAssessment,checkEmergence,checkMaintenance,checkMeds,checkPreinduction,goStep,newScenario,nextStep,prevStep,toggleCheck};
+const _nav=['goStep','nextStep','prevStep','newScenario'];
+window.NX={};
+Object.keys(_nx).forEach(k=>{
+  window.NX[k]=_nav.includes(k)?_nx[k]:function(){
+    const y=window.scrollY;
+    const r=_nx[k].apply(this,arguments);
+    window.scrollTo(0,y);
+    requestAnimationFrame(()=>{window.scrollTo(0,y);requestAnimationFrame(()=>window.scrollTo(0,y));});
+    return r;
+  };
+});
+// radio/checkbox selections: hold position too
+document.getElementById("neuro-app").addEventListener("change",function(){
+  const y=window.scrollY;
+  requestAnimationFrame(()=>window.scrollTo(0,y));
+});
 })();
 </script>
 </body>
